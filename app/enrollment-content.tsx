@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Users, BookOpen, GraduationCap, Building2, TrendingUp, BarChart3, Target, Activity, Eye, Brain, Database, BarChart4 } from "lucide-react"
 import { type EnrollmentData } from "@/lib/data-service"
 import { AIChat } from "@/components/ai-chat"
+import { VisualizationControls } from "@/components/visualization-controls"
 
 interface EnrollmentContentProps {
   enrollmentData: EnrollmentData
@@ -329,7 +330,9 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
 
         {/* Visualizations Tab */}
         <TabsContent value="visualizations" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -463,6 +466,19 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
               </CardContent>
             </Card>
           )}
+            </div>
+          </div>
+          
+          <div className="lg:col-span-1">
+            <VisualizationControls 
+              onVisualizationChange={(type, config) => {
+                console.log('Visualization changed:', type, config)
+                // Handle visualization changes here
+              }}
+              dataType="enrollment"
+            />
+          </div>
+        </div>
         </TabsContent>
 
         {/* AI Analysis Tab */}
