@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from "recharts"
@@ -9,6 +9,7 @@ import { Users, BookOpen, GraduationCap, Building2, TrendingUp, BarChart3, Targe
 import { type EnrollmentData } from "@/lib/data-service"
 import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
+import { useState } from "react"
 
 interface EnrollmentContentProps {
   enrollmentData: EnrollmentData
@@ -17,6 +18,15 @@ interface EnrollmentContentProps {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D']
 
 export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
+  const [currentVisualization, setCurrentVisualization] = useState({
+    type: "bar",
+    config: { metric: "total_enrollment", comparison: "by_country" }
+  })
+
+  const handleVisualizationChange = (type: string, config: any) => {
+    setCurrentVisualization({ type, config })
+  }
+
   // Prepare data for charts
   const earlyChildhoodByCountry = enrollmentData.earlyChildhood.reduce((acc, item) => {
     if (!acc[item.country_name]) {
@@ -192,6 +202,145 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
 
   const aiInsights = generateAIAnalysis()
 
+  // Prepare data for different visualizations
+  const prepareChartData = () => {
+    const { type, config } = currentVisualization
+
+    switch (config.metric) {
+      case "total_enrollment":
+        return Object.entries(primaryByCountry).map(([country, total]) => ({
+          country,
+          "Primary": total,
+          "Secondary": secondaryByCountry[country] || 0,
+          "Early Childhood": earlyChildhoodByCountry[country] || 0,
+          "Special Education": enrollmentData.specialEducation
+            .filter(item => item.country_name === country)
+            .reduce((sum, item) => sum + (item.total || 0), 0)
+        }))
+
+      case "gender_breakdown":
+        return [
+          {
+            level: "Early Childhood",
+            male: genderDistribution.earlyChildhood.male,
+            female: genderDistribution.earlyChildhood.female
+          },
+          {
+            level: "Primary",
+            male: genderDistribution.primary.male,
+            female: genderDistribution.primary.female
+          },
+          {
+            level: "Secondary",
+            male: genderDistribution.secondary.male,
+            female: genderDistribution.secondary.female
+          }
+        ]
+
+      case "education_levels":
+        return [
+          {
+            level: "Early Childhood",
+            total: enrollmentData.earlyChildhood.reduce((sum, item) => sum + (item.total || 0), 0)
+          },
+          {
+            level: "Primary",
+            total: enrollmentData.primary.reduce((sum, item) => sum + (item.total || 0), 0)
+          },
+          {
+            level: "Secondary",
+            total: enrollmentData.secondary.reduce((sum, item) => sum + (item.total || 0), 0)
+          },
+          {
+            level: "Special Education",
+            total: enrollmentData.specialEducation.reduce((sum, item) => sum + (item.total || 0), 0)
+          }
+        ]
+
+      case "gender_parity":
+        return genderParityData
+
+      default:
+        return Object.entries(primaryByCountry).map(([country, total]) => ({
+          country,
+          total: total + (secondaryByCountry[country] || 0) + (earlyChildhoodByCountry[country] || 0)
+        }))
+    }
+  }
+
+  const chartData = prepareChartData()
+
+  const renderVisualization = () => {
+    const { type, config } = currentVisualization
+
+    switch (type) {
+      case "pie":
+        const pieData = chartData
+          .map((item: { country?: string; level?: string; [key: string]: any }) => ({
+            name: item.country || item.level || "Unknown",
+            value: Object.values(item)
+              .slice(1)
+              .reduce((a: number, b: number) => a + b, 0),
+          }))
+          .filter((item) => item.value > 0)
+
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                outerRadius={120}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {COLORS.map((color, index) => (
+                  <Cell key={`cell-${index}`} fill={color} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Students']} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        )
+
+      case "stacked":
+        const stackKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country" && key !== "level")
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={config.metric === "gender_breakdown" ? "level" : "country"} />
+              <YAxis />
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Students']} />
+              <Legend />
+              {stackKeys.map((key, index) => (
+                <Bar key={key} dataKey={key} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        )
+
+      default:
+        const yKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country" && key !== "level")
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={config.metric === "gender_breakdown" ? "level" : "country"} />
+              <YAxis />
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Students']} />
+              <Legend />
+              {yKeys.map((key, index) => (
+                <Bar key={key} dataKey={key} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        )
+    }
+  }
+
   return (
     <div className="space-y-8">
       <Tabs defaultValue="overview" className="w-full">
@@ -330,9 +479,18 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
 
         {/* Visualizations Tab */}
         <TabsContent value="visualizations" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <VisualizationControls onVisualizationChange={handleVisualizationChange} dataType="enrollment" />
+            <div className="lg:col-span-3">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Custom Visualization</CardTitle>
+                  <CardDescription>Use the controls to create different views of the enrollment data</CardDescription>
+                </CardHeader>
+                <CardContent>{renderVisualization()}</CardContent>
+              </Card>
+            </div>
+          </div>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
