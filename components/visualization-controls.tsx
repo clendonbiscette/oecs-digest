@@ -114,7 +114,7 @@ export function VisualizationControls({ onVisualizationChange, dataType = "insti
       <CardContent className="space-y-4">
         <div>
           <label className="text-sm font-medium mb-2 block">Chart Type</label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2">
             {visualizationTypes.map((type) => {
               const Icon = type.icon
               return (
@@ -123,10 +123,10 @@ export function VisualizationControls({ onVisualizationChange, dataType = "insti
                   variant={selectedType === type.value ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedType(type.value)}
-                  className="justify-start"
+                  className="justify-start text-left"
                 >
-                  <Icon className="h-4 w-4 mr-2" />
-                  {type.label}
+                  <Icon className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="truncate">{type.label}</span>
                 </Button>
               )
             })}
