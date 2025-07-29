@@ -6,8 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CustomBarChart } from "@/components/charts/bar-chart"
 import { CustomPieChart } from "@/components/charts/pie-chart"
 import { StackedBarChart } from "@/components/charts/stacked-bar-chart"
+import { ResponsiveContainer, LineChart, AreaChart, Line, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B', '#4ECDC4', '#45B7D1']
 
 interface DashboardContentProps {
   educationData: any
@@ -115,6 +118,55 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
             stackKeys={stackKeys}
             title="Educational Institutions by Type and Country"
           />
+        )
+
+      case "line":
+        const lineKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country")
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="country" />
+              <YAxis />
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Institutions']} />
+              <Legend />
+              {lineKeys.map((key, index) => (
+                <Line 
+                  key={key} 
+                  type="monotone" 
+                  dataKey={key} 
+                  stroke={COLORS[index % COLORS.length]} 
+                  strokeWidth={2}
+                  dot={{ fill: COLORS[index % COLORS.length], strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        )
+
+      case "area":
+        const areaKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country")
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <AreaChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="country" />
+              <YAxis />
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Institutions']} />
+              <Legend />
+              {areaKeys.map((key, index) => (
+                <Area 
+                  key={key} 
+                  type="monotone" 
+                  dataKey={key} 
+                  stroke={COLORS[index % COLORS.length]} 
+                  fill={COLORS[index % COLORS.length]} 
+                  fillOpacity={0.3}
+                />
+              ))}
+            </AreaChart>
+          </ResponsiveContainer>
         )
 
       default:
