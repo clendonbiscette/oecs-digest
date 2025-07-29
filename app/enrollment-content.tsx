@@ -261,6 +261,51 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
       case "gender_parity":
         return genderParityData
 
+      case "age_distribution":
+        // Return age distribution data if available
+        return enrollmentData.primaryAgeDistribution?.map((item: any) => ({
+          country: item.country_name || "Unknown",
+          "Under-aged Male": item.under_aged_male_pct || 0,
+          "Under-aged Female": item.under_aged_female_pct || 0,
+          "Class-aged Male": item.class_aged_male_pct || 0,
+          "Class-aged Female": item.class_aged_female_pct || 0,
+          "Over-aged Male": item.over_aged_male_pct || 0,
+          "Over-aged Female": item.over_aged_female_pct || 0
+        })) || []
+
+      case "early_childhood_enrollment":
+        return Object.entries(earlyChildhoodByCountry).map(([country, total]) => ({
+          country,
+          "Early Childhood": total
+        }))
+
+      case "primary_enrollment":
+        return Object.entries(primaryByCountry).map(([country, total]) => ({
+          country,
+          "Primary": total
+        }))
+
+      case "secondary_enrollment":
+        return Object.entries(secondaryByCountry).map(([country, total]) => ({
+          country,
+          "Secondary": total
+        }))
+
+      case "special_education_enrollment":
+        return enrollmentData.specialEducation.map((item: any) => ({
+          country: item.country_name,
+          "Special Education": item.total || 0
+        }))
+
+      case "over_under_age":
+        // Return over/under age analysis data
+        return enrollmentData.primaryAgeDistribution?.map((item: any) => ({
+          country: item.country_name || "Unknown",
+          "Under-aged": (item.under_aged_male_pct || 0) + (item.under_aged_female_pct || 0),
+          "Class-aged": (item.class_aged_male_pct || 0) + (item.class_aged_female_pct || 0),
+          "Over-aged": (item.over_aged_male_pct || 0) + (item.over_aged_female_pct || 0)
+        })) || []
+
       default:
         return Object.entries(primaryByCountry).map(([country, total]) => ({
           country,
@@ -270,6 +315,10 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
   }
 
   const chartData = prepareChartData()
+  
+  // Debug logging
+  console.log('Current visualization:', currentVisualization)
+  console.log('Chart data:', chartData)
 
   // Download functions
   const downloadChartAsPNG = () => {
@@ -318,6 +367,18 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
 
   const renderVisualization = () => {
     const { type, config } = currentVisualization
+
+    // Handle empty data
+    if (!chartData || chartData.length === 0) {
+      return (
+        <div className="flex items-center justify-center h-64 text-gray-500">
+          <div className="text-center">
+            <p className="text-lg font-medium">No data available</p>
+            <p className="text-sm">Try selecting a different metric or chart type</p>
+          </div>
+        </div>
+      )
+    }
 
     switch (type) {
       case "pie":
