@@ -89,11 +89,11 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
     switch (type) {
       case "pie":
         const pieData = chartData
-          .map((item) => ({
+          .map((item: { country: string; [key: string]: any }) => ({
             name: item.country,
             value: Object.values(item)
               .slice(1)
-              .reduce((a: any, b: any) => a + b, 0),
+              .reduce((a: number, b: number) => a + b, 0),
           }))
           .filter((item) => item.value > 0)
 
@@ -299,6 +299,7 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
 
       <TabsContent value="data" className="space-y-6">
         <div className="grid grid-cols-1 gap-6">
+          {/* Education Summary by Country */}
           <Card>
             <CardHeader>
               <CardTitle>Education Summary by Country</CardTitle>
@@ -336,6 +337,182 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
               </div>
             </CardContent>
           </Card>
+
+          {/* Early Childhood Centres Detail */}
+          {educationData.earlyChildhood && educationData.earlyChildhood.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Early Childhood Centres Detail</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Country</th>
+                        <th className="text-right p-2">Daycare Public</th>
+                        <th className="text-right p-2">Daycare Private Church</th>
+                        <th className="text-right p-2">Daycare Private Non-Affiliated</th>
+                        <th className="text-right p-2">Daycare Total</th>
+                        <th className="text-right p-2">Preschool Public</th>
+                        <th className="text-right p-2">Preschool Private Church</th>
+                        <th className="text-right p-2">Preschool Private Non-Affiliated</th>
+                        <th className="text-right p-2">Preschool Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {educationData.earlyChildhood.map((item: { country_code: string; country_name: string; daycare_public: number; daycare_private_church: number; daycare_private_non_affiliated: number; daycare_total: number; preschool_public: number; preschool_private_church: number; preschool_private_non_affiliated: number; preschool_total: number }) => (
+                        <tr key={item.country_code} className="border-b">
+                          <td className="p-2 font-medium">{item.country_name}</td>
+                          <td className="text-right p-2">{item.daycare_public}</td>
+                          <td className="text-right p-2">{item.daycare_private_church}</td>
+                          <td className="text-right p-2">{item.daycare_private_non_affiliated}</td>
+                          <td className="text-right p-2 font-medium">{item.daycare_total}</td>
+                          <td className="text-right p-2">{item.preschool_public}</td>
+                          <td className="text-right p-2">{item.preschool_private_church}</td>
+                          <td className="text-right p-2">{item.preschool_private_non_affiliated}</td>
+                          <td className="text-right p-2 font-medium">{item.preschool_total}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Educational Institutions Detail */}
+          {educationData.institutions && educationData.institutions.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Educational Institutions Detail</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Country</th>
+                        <th className="text-right p-2">Primary Public</th>
+                        <th className="text-right p-2">Primary Private Church</th>
+                        <th className="text-right p-2">Primary Private Non-Affiliated</th>
+                        <th className="text-right p-2">Primary Total</th>
+                        <th className="text-right p-2">Secondary Public</th>
+                        <th className="text-right p-2">Secondary Private Church</th>
+                        <th className="text-right p-2">Secondary Private Non-Affiliated</th>
+                        <th className="text-right p-2">Secondary Total</th>
+                        <th className="text-right p-2">Special Ed Public</th>
+                        <th className="text-right p-2">Special Ed Private Church</th>
+                        <th className="text-right p-2">Special Ed Private Non-Affiliated</th>
+                        <th className="text-right p-2">Special Ed Total</th>
+                        <th className="text-right p-2">TVET Public</th>
+                        <th className="text-right p-2">TVET Private Church</th>
+                        <th className="text-right p-2">TVET Private Non-Affiliated</th>
+                        <th className="text-right p-2">TVET Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {educationData.institutions.map((item: { country_code: string; country_name: string; primary_public: number; primary_private_church: number; primary_private_non_affiliated: number; primary_total: number; secondary_public: number; secondary_private_church: number; secondary_private_non_affiliated: number; secondary_total: number; special_ed_public: number; special_ed_private_church: number; special_ed_private_non_affiliated: number; special_ed_total: number; tvet_public: number; tvet_private_church: number; tvet_private_non_affiliated: number; tvet_total: number }) => (
+                        <tr key={item.country_code} className="border-b">
+                          <td className="p-2 font-medium">{item.country_name}</td>
+                          <td className="text-right p-2">{item.primary_public}</td>
+                          <td className="text-right p-2">{item.primary_private_church}</td>
+                          <td className="text-right p-2">{item.primary_private_non_affiliated}</td>
+                          <td className="text-right p-2 font-medium">{item.primary_total}</td>
+                          <td className="text-right p-2">{item.secondary_public}</td>
+                          <td className="text-right p-2">{item.secondary_private_church}</td>
+                          <td className="text-right p-2">{item.secondary_private_non_affiliated}</td>
+                          <td className="text-right p-2 font-medium">{item.secondary_total}</td>
+                          <td className="text-right p-2">{item.special_ed_public}</td>
+                          <td className="text-right p-2">{item.special_ed_private_church}</td>
+                          <td className="text-right p-2">{item.special_ed_private_non_affiliated}</td>
+                          <td className="text-right p-2 font-medium">{item.special_ed_total}</td>
+                          <td className="text-right p-2">{item.tvet_public}</td>
+                          <td className="text-right p-2">{item.tvet_private_church}</td>
+                          <td className="text-right p-2">{item.tvet_private_non_affiliated}</td>
+                          <td className="text-right p-2 font-medium">{item.tvet_total}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Post-Secondary Institutions */}
+          {educationData.postSecondary && educationData.postSecondary.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Post-Secondary Institutions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Country</th>
+                        <th className="text-right p-2">Public Institutions</th>
+                        <th className="text-right p-2">Private Institutions</th>
+                        <th className="text-right p-2">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {educationData.postSecondary.map((item: { country_code: string; country_name: string; public_institutions: number; private_institutions: number; total: number }) => (
+                        <tr key={item.country_code} className="border-b">
+                          <td className="p-2 font-medium">{item.country_name}</td>
+                          <td className="text-right p-2">{item.public_institutions}</td>
+                          <td className="text-right p-2">{item.private_institutions}</td>
+                          <td className="text-right p-2 font-medium">{item.total}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Regional Summary */}
+          {educationData.regional && educationData.regional.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Regional Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Region</th>
+                        <th className="text-right p-2">Total Countries</th>
+                        <th className="text-right p-2">Total Early Childhood</th>
+                        <th className="text-right p-2">Total Primary</th>
+                        <th className="text-right p-2">Total Secondary</th>
+                        <th className="text-right p-2">Total Special Ed</th>
+                        <th className="text-right p-2">Total TVET</th>
+                        <th className="text-right p-2">Total Post-Secondary</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {educationData.regional.map((item: { region: string; total_countries: number; total_early_childhood: number; total_primary: number; total_secondary: number; total_special_ed: number; total_tvet: number; total_post_secondary: number }) => (
+                        <tr key={item.region} className="border-b">
+                          <td className="p-2 font-medium">{item.region}</td>
+                          <td className="text-right p-2">{item.total_countries}</td>
+                          <td className="text-right p-2">{item.total_early_childhood}</td>
+                          <td className="text-right p-2">{item.total_primary}</td>
+                          <td className="text-right p-2">{item.total_secondary}</td>
+                          <td className="text-right p-2">{item.total_special_ed}</td>
+                          <td className="text-right p-2">{item.total_tvet}</td>
+                          <td className="text-right p-2">{item.total_post_secondary}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </TabsContent>
     </Tabs>
