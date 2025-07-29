@@ -3,9 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from "recharts"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Users, BookOpen, GraduationCap, Building2, TrendingUp, BarChart3, Target, Activity, Eye, Brain, Database, BarChart4 } from "lucide-react"
+import { Users, BookOpen, GraduationCap, Building2, TrendingUp, BarChart3, Target, Activity, Eye, Brain, Database, BarChart4, Download, Image, FileText } from "lucide-react"
 import { type EnrollmentData } from "@/lib/data-service"
 import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
@@ -270,6 +271,51 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
 
   const chartData = prepareChartData()
 
+  // Download functions
+  const downloadChartAsPNG = () => {
+    const chartElement = document.querySelector('[data-chart="enrollment-visualization"]')
+    if (chartElement) {
+      // Use html2canvas to capture the chart
+      import('html2canvas').then(({ default: html2canvas }) => {
+        html2canvas(chartElement as HTMLElement).then((canvas: any) => {
+          const link = document.createElement('a')
+          link.download = `oecs-enrollment-${currentVisualization.type}-${currentVisualization.config.metric}.png`
+          link.href = canvas.toDataURL()
+          link.click()
+        })
+      })
+    }
+  }
+
+  const downloadChartAsSVG = () => {
+    const chartElement = document.querySelector('[data-chart="enrollment-visualization"] svg')
+    if (chartElement) {
+      const svgData = new XMLSerializer().serializeToString(chartElement)
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
+      const svgUrl = URL.createObjectURL(svgBlob)
+      const link = document.createElement('a')
+      link.href = svgUrl
+      link.download = `oecs-enrollment-${currentVisualization.type}-${currentVisualization.config.metric}.svg`
+      link.click()
+      URL.revokeObjectURL(svgUrl)
+    }
+  }
+
+  const downloadDataAsCSV = () => {
+    const headers = Object.keys(chartData[0] || {}).join(',')
+    const rows = chartData.map((row: any) => 
+      Object.values(row).map((value: any) => `"${value}"`).join(',')
+    ).join('\n')
+    const csv = `${headers}\n${rows}`
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = `oecs-enrollment-data-${currentVisualization.config.metric}.csv`
+    link.click()
+    URL.revokeObjectURL(link.href)
+  }
+
   const renderVisualization = () => {
     const { type, config } = currentVisualization
 
@@ -484,10 +530,47 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
             <div className="lg:col-span-3">
               <Card>
                 <CardHeader>
-                  <CardTitle>Custom Visualization</CardTitle>
-                  <CardDescription>Use the controls to create different views of the enrollment data</CardDescription>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Custom Visualization</CardTitle>
+                      <CardDescription>Use the controls to create different views of the enrollment data</CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={downloadChartAsPNG}
+                        className="flex items-center gap-2"
+                      >
+                        <Image className="h-4 w-4" />
+                        PNG
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={downloadChartAsSVG}
+                        className="flex items-center gap-2"
+                      >
+                        <Download className="h-4 w-4" />
+                        SVG
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={downloadDataAsCSV}
+                        className="flex items-center gap-2"
+                      >
+                        <FileText className="h-4 w-4" />
+                        CSV
+                      </Button>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>{renderVisualization()}</CardContent>
+                <CardContent>
+                  <div data-chart="enrollment-visualization">
+                    {renderVisualization()}
+                  </div>
+                </CardContent>
               </Card>
             </div>
           </div>
