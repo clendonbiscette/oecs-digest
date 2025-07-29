@@ -71,7 +71,7 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#DCE8D5' }}>
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">

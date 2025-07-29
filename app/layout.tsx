@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import { Navbar } from '@/components/navbar'
 
 export const metadata: Metadata = {
   title: 'OECS Interactive Statistical Digest',
@@ -33,7 +34,10 @@ html {
 }
         `}</style>
       </head>
-      <body>{children}</body>
+      <body style={{ backgroundColor: '#DCE8D5' }}>
+        <Navbar />
+        <main>{children}</main>
+      </body>
     </html>
   )
 }
