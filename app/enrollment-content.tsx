@@ -368,6 +368,55 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
           </ResponsiveContainer>
         )
 
+      case "line":
+        const lineKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country" && key !== "level")
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={config.metric === "gender_breakdown" ? "level" : "country"} />
+              <YAxis />
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Students']} />
+              <Legend />
+              {lineKeys.map((key, index) => (
+                <Line
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  stroke={COLORS[index % COLORS.length]}
+                  strokeWidth={2}
+                  dot={{ fill: COLORS[index % COLORS.length], strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        )
+
+      case "area":
+        const areaKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country" && key !== "level")
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <AreaChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={config.metric === "gender_breakdown" ? "level" : "country"} />
+              <YAxis />
+              <Tooltip formatter={(value) => [value.toLocaleString(), 'Students']} />
+              <Legend />
+              {areaKeys.map((key, index) => (
+                <Area
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  stroke={COLORS[index % COLORS.length]}
+                  fill={COLORS[index % COLORS.length]}
+                  fillOpacity={0.3}
+                />
+              ))}
+            </AreaChart>
+          </ResponsiveContainer>
+        )
+
       default:
         const yKeys = Object.keys(chartData[0] || {}).filter((key) => key !== "country" && key !== "level")
         return (
