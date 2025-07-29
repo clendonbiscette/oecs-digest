@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { CustomBarChart } from "@/components/charts/bar-chart"
 import { CustomPieChart } from "@/components/charts/pie-chart"
 import { StackedBarChart } from "@/components/charts/stacked-bar-chart"
 import { ResponsiveContainer, LineChart, AreaChart, Line, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
+import { Download, Image, FileText } from "lucide-react"
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B', '#4ECDC4', '#45B7D1']
 
@@ -85,6 +87,51 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
   }
 
   const chartData = prepareChartData()
+
+  // Download functions
+  const downloadChartAsPNG = () => {
+    const chartElement = document.querySelector('[data-chart="custom-visualization"]')
+    if (chartElement) {
+      // Use html2canvas to capture the chart
+      import('html2canvas').then(({ default: html2canvas }) => {
+        html2canvas(chartElement as HTMLElement).then((canvas: any) => {
+          const link = document.createElement('a')
+          link.download = `oecs-education-${currentVisualization.type}-${currentVisualization.config.metric}.png`
+          link.href = canvas.toDataURL()
+          link.click()
+        })
+      })
+    }
+  }
+
+  const downloadChartAsSVG = () => {
+    const chartElement = document.querySelector('[data-chart="custom-visualization"] svg')
+    if (chartElement) {
+      const svgData = new XMLSerializer().serializeToString(chartElement)
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
+      const svgUrl = URL.createObjectURL(svgBlob)
+      const link = document.createElement('a')
+      link.href = svgUrl
+      link.download = `oecs-education-${currentVisualization.type}-${currentVisualization.config.metric}.svg`
+      link.click()
+      URL.revokeObjectURL(svgUrl)
+    }
+  }
+
+  const downloadDataAsCSV = () => {
+    const headers = Object.keys(chartData[0] || {}).join(',')
+    const rows = chartData.map((row: any) => 
+      Object.values(row).map((value: any) => `"${value}"`).join(',')
+    ).join('\n')
+    const csv = `${headers}\n${rows}`
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = `oecs-education-data-${currentVisualization.config.metric}.csv`
+    link.click()
+    URL.revokeObjectURL(link.href)
+  }
 
   const renderVisualization = () => {
     const { type, config } = currentVisualization
@@ -299,10 +346,47 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
           <div className="lg:col-span-3">
             <Card>
               <CardHeader>
-                <CardTitle>Custom Visualization</CardTitle>
-                <CardDescription>Use the controls to create different views of the education data</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Custom Visualization</CardTitle>
+                    <CardDescription>Use the controls to create different views of the education data</CardDescription>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={downloadChartAsPNG}
+                      className="flex items-center gap-2"
+                    >
+                      <Image className="h-4 w-4" />
+                      PNG
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={downloadChartAsSVG}
+                      className="flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      SVG
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={downloadDataAsCSV}
+                      className="flex items-center gap-2"
+                    >
+                      <FileText className="h-4 w-4" />
+                      CSV
+                    </Button>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent>{renderVisualization()}</CardContent>
+              <CardContent>
+                <div data-chart="custom-visualization">
+                  {renderVisualization()}
+                </div>
+              </CardContent>
             </Card>
           </div>
         </div>
