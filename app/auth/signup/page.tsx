@@ -58,29 +58,23 @@ export default function SignupPage() {
     }
 
     try {
-      // Sign up the user
+      // Sign up the user with metadata
+      // The database trigger will automatically create the user_profiles record
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName,
+            country_id: countryId,
+            role: 'statistician'
+          }
+        }
       })
 
       if (authError) throw authError
 
       if (!authData.user) throw new Error('User creation failed')
-
-      // Create user profile
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .insert({
-          id: authData.user.id,
-          email,
-          full_name: fullName,
-          country_id: parseInt(countryId),
-          role: 'statistician', // Default role
-          is_active: true,
-        })
-
-      if (profileError) throw profileError
 
       setSuccess(true)
       setTimeout(() => {
