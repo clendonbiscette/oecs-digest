@@ -1,0 +1,620 @@
+====================================================================================================
+COMPREHENSIVE OECS EDUCATION DATA TEMPLATE ANALYSIS
+====================================================================================================
+
+FILE: C:\Users\Clendon\oecs-education-dashboard\DIGEST_WEB\Blank OECS MS Template.xlsx
+TOTAL WORKSHEETS: 9
+ACADEMIC YEAR: 2023-2024
+
+
+====================================================================================================
+SHEET: Institutions
+====================================================================================================
+
+Academic Year: 2023-2024
+Dimensions: A1:Z1000
+Data Range: Rows 1-1000, Columns A-Z
+Merged Cells: 2
+
+NUMBER OF DATA TABLES IDENTIFIED: 1
+
+  TABLE 1:
+    Row Range: 3-12
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 3: A=A1. Number of Institutions by 
+      Row 4: A=Level | B=Types
+      Row 5: B=Public  | C=Private/Church-assisted | D=Private/Non-affiliated | E=Total
+      Row 6: A=Daycare Centres  | E==SUM(B6:D6)
+      Row 7: A=Pre-schools  | E==SUM(B7:D7)
+
+FORMULAS (7 found):
+  Pattern: =SUM
+    - E6: =SUM(B6:D6)
+    - E7: =SUM(B7:D7)
+    - E8: =SUM(B8:D8)
+
+
+====================================================================================================
+SHEET: LeadersTeachersQualifications
+====================================================================================================
+
+Academic Year: 2023-2024
+Dimensions: A1:AH1001
+Data Range: Rows 1-1001, Columns A-AH
+Merged Cells: 75
+
+NUMBER OF DATA TABLES IDENTIFIED: 7
+
+  TABLE 1:
+    Row Range: 1-3
+    Total Rows: 3
+    Structure (first 5 rows):
+      Row 1: A=B. Leaders and Teachers: Quali | F=2023-2024 | H=(7 Tables) | N= 
+      Row 2: A=A Trained teacher is one who h
+      Row 3: A=A Graduate teacher is one who 
+
+  TABLE 2:
+    Row Range: 5-22
+    Total Rows: 18
+    Structure (first 5 rows):
+      Row 5: A=B1.Qualifications & Training: 
+      Row 6: A=Stage | B=Type of School | C=Qualifications | E=Administrators | H=Deputy Principal | K=Care Givers
+      Row 7: E=Male  | F=Female | G=Totals | H=Male  | I=Female | J=Totals | K=Male  | L=Female
+      Row 8: A=Pre-schools & Daycares | B=Public | C=Graduate | D=Trained | G==SUM(E8:F8) | J==SUM(H8:I8) | M==SUM(K8:L8)
+      Row 9: D=Untrained | G==SUM(E9:F9) | J==SUM(H9:I9) | M==SUM(K9:L9)
+
+  TABLE 3:
+    Row Range: 24-42
+    Total Rows: 19
+    Structure (first 5 rows):
+      Row 24: A=B2: Qualifications & Training: | D=2023-2024
+      Row 25: A=Level | B=Type of School | C=Qualifications | E=Principal | H=Deputy Principal | K=Teachers
+      Row 26: E=Male  | F=Female | G=Totals | H=Male  | I=Female | J=Totals | K=Male  | L=Female
+      Row 27: A=PRIMARY | B=Public | C=Graduate | D=Trained | G==E27+F27 | J==H27+I27 | M==SUM(K27:L27)
+      Row 28: D=Untrained | G==E28+F28 | J==H28+I28 | M==SUM(K28:L28)
+
+  TABLE 4:
+    Row Range: 46-65
+    Total Rows: 20
+    Structure (first 5 rows):
+      Row 46: A=B3. Qualifications & Training: | D=2023-2024
+      Row 47: A=Level | B=Type of School | C=Qualifications | E=Principal | H=Deputy Principal | K=Teachers
+      Row 48: E=Male  | F=Female | G=Totals | H=Male  | I=Female | J=Totals | K=Male  | L=Female
+      Row 49: A=SECONDARY | B=Public | C=Graduate | D=Trained | G==SUM(E49+F49) | J==SUM(H49+I49) | M==SUM(K49:L49)
+      Row 50: D=Untrained | G==SUM(E50+F50) | J==SUM(H50+I50) | M==SUM(K50:L50)
+
+  TABLE 5:
+    Row Range: 67-75
+    Total Rows: 9
+    Structure (first 5 rows):
+      Row 67: A=B4. Qualifications & Training: | F=National College (s) | I=2023-2024
+      Row 68: A=Stage | B=Type of School | C=Qualifications | D=Principal | G=Deputy Principal | J=Teachers
+      Row 69: D=Male  | E=Female | F=Totals | G=Male  | H=Female | I=Totals | J=Male  | K=Female
+      Row 70: A=Post-Secondary/Tertiary | B=Public | C=Graduate | F==SUM(D70:E70) | I==SUM(G70:H70) | L==J70+K70
+      Row 71: C=Non-graduate | F==SUM(D71:E71) | I==SUM(G71:H71) | L==J71+K71
+
+  TABLE 6:
+    Row Range: 78-108
+    Total Rows: 31
+    Structure (first 5 rows):
+      Row 78: A=B5. Teachers: Highest Academic | D=2023-2024
+      Row 79: A=Stage/Qualification | B=Pre-schools & Daycares | E=Primary | H=Secondary | K=Post-secondary/Tertiary
+      Row 80: B=Male | C=Female | D=Total | E=Male | F=Female | G=Total | H=Male | I=Female
+      Row 81: A=CSEC/O-Level | D==SUM(B81:C81) | G==SUM(E81:F81) | J==SUM(H81:I81) | M==SUM(K81:L81)
+      Row 82: A=CAPE/A-Levels | D==SUM(B82:C82) | G==SUM(E82:F82) | J==SUM(H82:I82) | M==SUM(K82:L82)
+
+  TABLE 7:
+    Row Range: 111-115
+    Total Rows: 5
+    Structure (first 5 rows):
+      Row 111: A=B7: Continuous Professional De | E=2023-2024
+      Row 112: A=Number of Primary school princ
+      Row 113: A=Number of Secondary school pri
+      Row 114: A=Number of Primary school teach
+      Row 115: A=Number of Secondary school tea
+
+FORMULAS (284 found):
+  Pattern: =SUM
+    - G8: =SUM(E8:F8)
+    - J8: =SUM(H8:I8)
+    - M8: =SUM(K8:L8)
+
+
+====================================================================================================
+SHEET: Age & Years of Service
+====================================================================================================
+
+Academic Year: 2023-2024
+Dimensions: A1:Z1000
+Data Range: Rows 1-1000, Columns A-Z
+Merged Cells: 24
+
+NUMBER OF DATA TABLES IDENTIFIED: 11
+
+  TABLE 1:
+    Row Range: 3-12
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 3: A=C1. Age and Years of Service: 
+      Row 4: C=School Type | D=Pre-schools | G=Primary | J=Secondary | M=Post-secondary/Tertiary
+      Row 5: D=Male | E=Female | F=Totals | G=Male | H=Female | I=Totals | J=Male | K=Female
+      Row 6: A=Age range | B=>19 | C=Public | F==SUM(D6:E6) | I==SUM(G6:H6) | L==SUM(J6:K6) | O==SUM(M6:N6)
+      Row 7: B=20 - 29 | F==SUM(D7:E7) | I==SUM(G7:H7) | L==SUM(J7:K7) | O==SUM(M7:N7)
+
+  TABLE 2:
+    Row Range: 14-20
+    Total Rows: 7
+    Structure (first 5 rows):
+      Row 14: B=>19 | C=Private | F==SUM(D14:E14) | I==SUM(G14:H14) | L==SUM(J14:K14) | O==SUM(M14:N14)
+      Row 15: B=20 - 29 | F==SUM(D15:E15) | I==SUM(G15:H15) | L==SUM(J15:K15) | O==SUM(M15:N15)
+      Row 16: B=30 - 39 | F==SUM(D16:E16) | I==SUM(G16:H16) | L==SUM(J16:K16) | O==SUM(M16:N16)
+      Row 17: B=40 - 49 | F==SUM(D17:E17) | I==SUM(G17:H17) | L==SUM(J17:K17) | O==SUM(M17:N17)
+      Row 18: B=50 - 59 | F==SUM(D18:E18) | I==SUM(G18:H18) | L==SUM(J18:K18) | O==SUM(M18:N18)
+
+  TABLE 3:
+    Row Range: 22-28
+    Total Rows: 7
+    Structure (first 5 rows):
+      Row 22: B=>19 | C=Totals | D==SUM(D6,D14) | E==SUM(E6,E14) | F==SUM(D22:E22) | G==SUM(G6,G14) | H==SUM(H6,H14) | I==SUM(G22:H22)
+      Row 23: B=20 - 29 | D==SUM(D7,D15) | E==SUM(E7,E15) | F==SUM(D23:E23) | G==SUM(G7,G15) | H==SUM(H7,H15) | I==SUM(G23:H23) | J==SUM(J7,J15)
+      Row 24: B=30 - 39 | D==SUM(D8,D16) | E==SUM(E8,E16) | F==SUM(D24:E24) | G==SUM(G8,G16) | H==SUM(H8,H16) | I==SUM(G24:H24) | J==SUM(J8,J16)
+      Row 25: B=40 - 49 | D==SUM(D9,D17) | E==SUM(E9,E17) | F==SUM(D25:E25) | G==SUM(G9,G17) | H==SUM(H9,H17) | I==SUM(G25:H25) | J==SUM(J9,J17)
+      Row 26: B=50 - 59 | D==SUM(D10,D18) | E==SUM(E10,E18) | F==SUM(D26:E26) | G==SUM(G10,G18) | H==SUM(H10,H18) | I==SUM(G26:H26) | J==SUM(J10,J18)
+
+  TABLE 4:
+    Row Range: 31-40
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 31: A=Years of service | B=<1 | F==SUM(D31:E31) | I==SUM(G31:H31) | L==SUM(J31:K31) | O==SUM(M31:N31)
+      Row 32: B=1 - 5 | C=Public | F==SUM(D32:E32) | I==SUM(G32:H32) | L==SUM(J32:K32) | O==SUM(M32:N32)
+      Row 33: B=6 - 10 | F==SUM(D33:E33) | I==SUM(G33:H33) | L==SUM(J33:K33) | O==SUM(M33:N33)
+      Row 34: B=11 - 15 | F==SUM(D34:E34) | I==SUM(G34:H34) | L==SUM(J34:K34) | O==SUM(M34:N34)
+      Row 35: B=16 - 20 | F==SUM(D35:E35) | I==SUM(G35:H35) | L==SUM(J35:K35) | O==SUM(M35:N35)
+
+  TABLE 5:
+    Row Range: 42-51
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 42: B=<1 | F==SUM(D42:E42) | I==SUM(G42:H42) | L==SUM(J42:K42) | O==SUM(M42:N42)
+      Row 43: B=1 - 5 | C=Private | F==SUM(D43:E43) | I==SUM(G43:H43) | L==SUM(J43:K43) | O==SUM(M43:N43)
+      Row 44: B=6 - 10 | F==SUM(D44:E44) | I==SUM(G44:H44) | L==SUM(J44:K44) | O==SUM(M44:N44)
+      Row 45: B=11 - 15 | F==SUM(D45:E45) | I==SUM(G45:H45) | L==SUM(J45:K45) | O==SUM(M45:N45)
+      Row 46: B=16 - 20 | F==SUM(D46:E46) | I==SUM(G46:H46) | L==SUM(J46:K46) | O==SUM(M46:N46)
+
+  TABLE 6:
+    Row Range: 53-62
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 53: B=<1 | D==SUM(D31,D42) | E==SUM(E31,E42) | F==SUM(D53:E53) | G==SUM(G31,G42) | H==SUM(H31,H42) | I==SUM(G53:H53) | J==SUM(J31,J42)
+      Row 54: B=1 - 5 | C=Totals | D==SUM(D32,D43) | E==SUM(E32,E43) | F==SUM(D54:E54) | G==SUM(G32,G43) | H==SUM(H32,H43) | I==SUM(G54:H54)
+      Row 55: B=6 - 10 | D==SUM(D33,D44) | E==SUM(E33,E44) | F==SUM(D55:E55) | G==SUM(G33,G44) | H==SUM(H33,H44) | I==SUM(G55:H55) | J==SUM(J33,J44)
+      Row 56: B=11 - 15 | D==SUM(D34,D45) | E==SUM(E34,E45) | F==SUM(D56:E56) | G==SUM(G34,G45) | H==SUM(H34,H45) | I==SUM(G56:H56) | J==SUM(J34,J45)
+      Row 57: B=16 - 20 | D==SUM(D35,D46) | E==SUM(E35,E46) | F==SUM(D57:E57) | G==SUM(G35,G46) | H==SUM(H35,H46) | I==SUM(G57:H57) | J==SUM(J35,J46)
+
+  TABLE 7:
+    Row Range: 67-76
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 67: A=C2. Age Range and Years of Ser | G=2023-2024
+      Row 68: C=School Type | D=Pre-schools | G=Primary | J=Secondary | M=Post-secondary/Tertiary
+      Row 69: D=Male | E=Female | F=Totals | G=Male | H=Female | I=Totals | J=Male | K=Female
+      Row 70: A=Age range | B=>19 | C=Public | F==SUM(D70:E70) | I==SUM(G70:H70) | L==SUM(J70:K70) | O==SUM(M70:N70)
+      Row 71: B=20 - 29 | F==SUM(D71:E71) | I==SUM(G71:H71) | L==SUM(J71:K71) | O==SUM(M71:N71)
+
+  TABLE 8:
+    Row Range: 78-92
+    Total Rows: 15
+    Structure (first 5 rows):
+      Row 78: B=>19 | C=Private | F==SUM(D78:E78) | I==SUM(G78:H78) | L==SUM(J78:K78) | O==SUM(M78:N78)
+      Row 79: B=20 - 29 | F==SUM(D79:E79) | I==SUM(G79:H79) | L==SUM(J79:K79) | O==SUM(M79:N79)
+      Row 80: B=30 - 39 | F==SUM(D80:E80) | I==SUM(G80:H80) | L==SUM(J80:K80) | O==SUM(M80:N80)
+      Row 81: B=40 - 49 | F==SUM(D81:E81) | I==SUM(G81:H81) | L==SUM(J81:K81) | O==SUM(M81:N81)
+      Row 82: B=50 - 59 | F==SUM(D82:E82) | I==SUM(G82:H82) | L==SUM(J82:K82) | O==SUM(M82:N82)
+
+  TABLE 9:
+    Row Range: 95-104
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 95: B=<1 | F==SUM(D95:E95) | I==SUM(G95:H95) | L==SUM(J95:K95) | O==SUM(M95:N95)
+      Row 96: A=Years of service | B=1 - 5 | C=Public | F==SUM(D96:E96) | I==SUM(G96:H96) | L==SUM(J96:K96) | O==SUM(M96:N96)
+      Row 97: B=6 - 10 | F==SUM(D97:E97) | I==SUM(G97:H97) | L==SUM(J97:K97) | O==SUM(M97:N97)
+      Row 98: B=11 - 15 | F==SUM(D98:E98) | I==SUM(G98:H98) | L==SUM(J98:K98) | O==SUM(M98:N98)
+      Row 99: B=16 - 20 | F==SUM(D99:E99) | I==SUM(G99:H99) | L==SUM(J99:K99) | O==SUM(M99:N99)
+
+  TABLE 10:
+    Row Range: 106-115
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 106: B=<1 | F==SUM(D106:E106) | I==SUM(G106:H106) | L==SUM(J106:K106) | O==SUM(M106:N106)
+      Row 107: B=1 - 5 | C=Private | F==SUM(D107:E107) | I==SUM(G107:H107) | L==SUM(J107:K107) | O==SUM(M107:N107)
+      Row 108: B=6 - 10 | F==SUM(D108:E108) | I==SUM(G108:H108) | L==SUM(J108:K108) | O==SUM(M108:N108)
+      Row 109: B=11 - 15 | F==SUM(D109:E109) | I==SUM(G109:H109) | L==SUM(J109:K109) | O==SUM(M109:N109)
+      Row 110: B=16 - 20 | F==SUM(D110:E110) | I==SUM(G110:H110) | L==SUM(J110:K110) | O==SUM(M110:N110)
+
+  TABLE 11:
+    Row Range: 117-126
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 117: B=<1 | D==SUM(D95,D106) | E==SUM(E95,E106) | F==SUM(F95,F106) | G==SUM(G95,G106) | H==SUM(H95,H106) | I==SUM(I95,I106) | J==SUM(J95,J106)
+      Row 118: B=1 - 5 | C=Totals | D==SUM(D96,D107) | E==SUM(E96,E107) | F==SUM(F96,F107) | G==SUM(G96,G107) | H==SUM(H96,H107) | I==SUM(I96,I107)
+      Row 119: B=6 - 10 | D==SUM(D97,D108) | E==SUM(E97,E108) | F==SUM(F97,F108) | G==SUM(G97,G108) | H==SUM(H97,H108) | I==SUM(I97,I108) | J==SUM(J97,J108)
+      Row 120: B=11 - 15 | D==SUM(D98,D109) | E==SUM(E98,E109) | F==SUM(F98,F109) | G==SUM(G98,G109) | H==SUM(H98,H109) | I==SUM(I98,I109) | J==SUM(J98,J109)
+      Row 121: B=16 - 20 | D==SUM(D99,D110) | E==SUM(E99,E110) | F==SUM(F99,F110) | G==SUM(G99,G110) | H==SUM(H99,H110) | I==SUM(I99,I110) | J==SUM(J99,J110)
+
+FORMULAS (505 found):
+  Pattern: =SUM
+    - F6: =SUM(D6:E6)
+    - I6: =SUM(G6:H6)
+    - L6: =SUM(J6:K6)
+
+
+====================================================================================================
+SHEET: Student Enrolment
+====================================================================================================
+
+Academic Year: 2023-2024
+Dimensions: A1:AJ1000
+Data Range: Rows 1-1000, Columns A-AJ
+Merged Cells: 661
+
+NUMBER OF DATA TABLES IDENTIFIED: 6
+
+  TABLE 1:
+    Row Range: 3-22
+    Total Rows: 20
+    Structure (first 5 rows):
+      Row 3: A=D1.Enrolment: Early Childhood
+      Row 4: A=PUBLIC | G=PRIVATE/ GOVERNMENT ASSISTED | N=TOTAL ENROLMENT
+      Row 5: A=Age as of Oct. 15th | B=Sex | E=Both | G=Age as of Oct. 15th | H=Sex | I=Enrolment | K=Both | N=Age as of Oct. 15th
+      Row 6: A=> 1 year | B=M | E==SUM(C6,C7) | G=> 1 year | H=M | K==SUM(I6,I7) | N=< 1 year | O=M
+      Row 7: B=F | H=F | O=F | P==SUM(C7,I7)
+
+  TABLE 2:
+    Row Range: 25-42
+    Total Rows: 18
+    Structure (first 5 rows):
+      Row 25: A=D2. Enrolment: Special Schools
+      Row 26: A=PUBLIC | G=PRIVATE/ GOVERNMENT ASSISTED | N=TOTAL ENROLMENT
+      Row 27: A=Age as of Oct. 15th | B=Sex | C=Enrolment | E=Both | G=Age as of Oct. 15th | H=Sex | I=Enrolment | K=Both
+      Row 28: A=£5 | B=M | E==SUM(C28,C29) | G=£5 | H=M | K==SUM(I28,I29) | N=£5 | O=M
+      Row 29: B=F | H=F | O=F | P==SUM(C29,I29)
+
+  TABLE 3:
+    Row Range: 45-79
+    Total Rows: 35
+    Structure (first 5 rows):
+      Row 45: A=D3. Enrolment: Primary Schools
+      Row 46: A=PUBLIC | M=PRIVATE/ GOVERNMENT ASSISTED | Z=TOTAL ENROLMENT
+      Row 47: A=Age as of Oct. 15th | B=Sex | C=Primary Grades | M=Age as of Oct. 15th | N=Sex | O=Primary Grades | Z=Age as of Oct. 15th | AA=Sex
+      Row 48: C=K | D=G1 | E=G2 | F=G3 | G=G4 | H=G5 | I=G6 | J=TOTALS
+      Row 49: A=  < 5 years | B=M | J==SUM(C49:I49) | K==SUM(J49:J50) | M=  < 5 years | N=M | V==SUM(O49:U49) | W==SUM(V49:V50)
+
+  TABLE 4:
+    Row Range: 82-110
+    Total Rows: 29
+    Structure (first 5 rows):
+      Row 82: A=D4. Enrolment: Secondary Schoo
+      Row 83: A=PUBLIC | M=PRIVATE/ GOVERNMENT ASSISTED | Z=TOTAL ENROLMENT
+      Row 84: A=Age as of Oct. 15th | B=SEX | C=FORMS | H=TOTALS | M=Age as of Oct. 15th | N=SEX | O=FORMS | T=TOTALS
+      Row 85: C=1.0 | D=2.0 | E=3.0 | F=4.0 | G=5.0 | H=Subtotal | I=Both | O=1.0
+      Row 86: A=  < 11 years | B=M | H==SUM(C86:G86) | I==SUM(H86:H87) | M=  < 11 years | N=M | T==SUM(O86:S86) | U==SUM(T86:T87)
+
+  TABLE 5:
+    Row Range: 115-145
+    Total Rows: 31
+    Structure (first 5 rows):
+      Row 115: A=Age as of Oct. 15th | B=SEX | C=PROGRAMMES OF STUDY | H=TOTALS
+      Row 116: C=TVET | D=CAPE/A-Levels | E=Hospitality | F=Other Post-secondary Non-Terti | G=Tertiary | H=Subtotal | I=Both
+      Row 117: A=  < 16 years | B=M | H==SUM(C117:G117) | I==SUM(H117:H118)
+      Row 118: B=F | H==SUM(C118:G118)
+      Row 119: A=16 years | B=M | H==SUM(C119:G119) | I==SUM(H119:H120)
+
+  TABLE 6:
+    Row Range: 150-184
+    Total Rows: 35
+    Structure (first 5 rows):
+      Row 150: A=D6. Enrolment: Primary Schools
+      Row 151: A=PUBLIC | M=PRIVATE/ GOVERNMENT ASSISTED | Z=TOTAL ENROLMENT
+      Row 152: A=Age as of Oct. 15th | B=Sex | C=Primary Grades | M=Age as of Oct. 15th | N=Sex | O=Primary Grades | Z=Age as of Oct. 15th | AA=Sex
+      Row 153: C=K | D=G1 | E=G2 | F=G3 | G=G4 | H=G5 | I=G6 | J=TOTALS
+      Row 154: A=  < 5 years | B=M | J==SUM(C154:I154) | K==SUM(J154:J155) | M=  < 5 years | N=M | V==SUM(O154:U154) | W==SUM(V154:V155)
+
+FORMULAS (623 found):
+  Pattern: =SUM
+    - E6: =SUM(C6,C7)
+    - K6: =SUM(I6,I7)
+    - P6: =SUM(C6,I6)
+
+COMMENTS (1 found):
+  A147: ======
+ID#AAABq--6ce4
+Keith Thomas    (2025-09-10 15:53:58)
+@royston.emmanuel@oecs.int 
+
+We would ne
+
+
+====================================================================================================
+SHEET: Internal Efficiency
+====================================================================================================
+
+Dimensions: A1:Z1000
+Data Range: Rows 1-1000, Columns A-Z
+Merged Cells: 45
+
+NUMBER OF DATA TABLES IDENTIFIED: 3
+
+  TABLE 1:
+    Row Range: 6-35
+    Total Rows: 30
+    Structure (first 5 rows):
+      Row 6: A=E1- Repeaters - 2022-23 | T=2022-2023
+      Row 7: A=Repeaters: Primary | J=Repeaters: Secondary | T=Reasons | U=(Secondary)
+      Row 8: U=M | V=F
+      Row 9: T=Financial Difficulties
+      Row 10: A=GRADE | B= NO. OF REPEATERS      -Update | J=FORM | K= NO. OF REPEATERS      -Update | U==SUM(U9:V9)
+
+  TABLE 2:
+    Row Range: 40-44
+    Total Rows: 5
+    Structure (first 5 rows):
+      Row 40: A=Public schools | B=Public schools | I=Private schools | N=Totals
+      Row 41: A=Stage | B=Total no. of students | C=No. of classes | D=No. of teachers | E=No. of Specialist Teachers | F=Class size | G=Student/Teacher Ratio | H=Effective Student/Teacher Rati
+      Row 42: A=Pre-primary | F==B42/C42 | G==B42/D42 | L==I42/J42 | M==I42/K42 | N==B42+I42 | O==C42+J42 | P==D42+K42
+      Row 43: A=Primary | F==B43/C43 | G==B43/D43 | H==B43/(D43-E43) | L==I43/J43 | M==I43/K43 | N==B43+I43 | O==C43+J43
+      Row 44: A=Secondary | F==B44/C44 | G==B44/D44 | L==I44/J44 | M==I44/K44 | N==B44+I44 | O==C44+J44 | P==D44+K44
+
+  TABLE 3:
+    Row Range: 49-54
+    Total Rows: 6
+    Structure (first 5 rows):
+      Row 49: A=No. of Primary schools Managed
+      Row 50: A=No. of Secondary schools Manag
+      Row 51: A=No. of Primary schools with a 
+      Row 52: A=No. of Secondary schools with  | I=     
+      Row 53: A=No. of Primary schools with a 
+
+FORMULAS (76 found):
+  Pattern: =SUM
+    - U10: =SUM(U9:V9)
+    - U12: =SUM(U11:V11)
+    - D13: =SUM(B13:C13)
+
+COMMENTS (2 found):
+  A6: ======
+ID#AAABq--6ce0
+Keith Thomas    (2025-09-10 15:51:58)
+@royston.emmanuel@oecs.int 
+
+These are d
+  E43: ======
+ID#AAABq_Ih3RY
+     (2025-09-10 13:00:24)
+Only Include Specialist Teachers who do not have a 
+
+
+====================================================================================================
+SHEET: Systems Output
+====================================================================================================
+
+Academic Year: 2024.0
+Dimensions: A1:Z1002
+Data Range: Rows 1-1002, Columns A-Z
+Merged Cells: 100
+
+NUMBER OF DATA TABLES IDENTIFIED: 7
+
+  TABLE 1:
+    Row Range: 4-10
+    Total Rows: 7
+    Structure (first 5 rows):
+      Row 4: A=F1. Number of pupils performin
+      Row 5: A=Note: 1. This is the data coll
+      Row 6: A=READING | G=MATHEMATICS
+      Row 7: A=Grade Level | B=Male | C=Female | D=Total | G=Grade Level | H=Male | I=Female | J=Total
+      Row 8: A=Grade 2 | D==SUM(B8:C8) | G=Grade 2 | J==SUM(H8:I8)
+
+  TABLE 2:
+    Row Range: 13-19
+    Total Rows: 7
+    Structure (first 5 rows):
+      Row 13: A=F2. Caribbean Certificate of S | H=2024.0
+      Row 14: B=English | E=Mathematics | H=IS
+      Row 15: C=No. Attaining | F=No. Attaining | I=No. Attaining
+      Row 16: B=No sitting | C=M | D=C | E=No sitting | F=M | G=C | H=No sitting | I=M
+      Row 17: A=M | B=… | C=… | D=… | E=… | F=… | G=… | H=…
+
+  TABLE 3:
+    Row Range: 21-26
+    Total Rows: 6
+    Structure (first 5 rows):
+      Row 21: B=Social Studies | E=Spanish | H=French
+      Row 22: C=No. Attaining | F=No. Attaining | I=No. Attaining
+      Row 23: B=No sitting | C=M | D=C | E=No sitting | F=M | G=C | H=No sitting | I=M
+      Row 24: A=M | B=… | C=… | D=… | E=… | F=… | G=… | H=…
+      Row 25: A=F | B=… | C=… | D=… | E=… | F=… | G=… | H=…
+
+  TABLE 4:
+    Row Range: 30-84
+    Total Rows: 55
+    Structure (first 5 rows):
+      Row 30: B=Subject | C=Sex | D=No. sitting | E=No. achieving I - III | H=Subject | I=Sex | J=No. sitting | K=No. achieving I - III
+      Row 31: A=Literacy and Numeracy | B=English A | C=M | G=Business Studies | H=Economics | I=M
+      Row 32: C=F | I=F
+      Row 33: C=T | I=T
+      Row 34: B=English B | C=M | H=EDPM | I=M
+
+  TABLE 5:
+    Row Range: 88-95
+    Total Rows: 8
+    Structure (first 5 rows):
+      Row 88: A=F4. Trends in Passes in Englis | F=2020 - 2024
+      Row 89: A=Year | B=English A | H=Mathematics | N=Information Technology
+      Row 90: B=Number Sitting | E=No. achieving Grades I – III  | H=Number Sitting | K=No. achieving Grades I – III  | N=Number Sitting | Q=No. achieving Grades I – III 
+      Row 91: B=M | C=F | D=T | E=M | F=F | G=T | H=M | I=F
+      Row 92: A=2023.0
+
+  TABLE 6:
+    Row Range: 100-106
+    Total Rows: 7
+    Structure (first 5 rows):
+      Row 100: A=F5. Achievement in at least 5  | F=2020 - 2024
+      Row 101: A=Year | B=No. students sitting | E=No. students sitting at least  | H=No. students achieving 5 CSEC  | K=No. students achieving 5 CSEC 
+      Row 102: B=Male | C=Female | D=Total | E=Male | F=Female | G=Total | H=Male | I=Female
+      Row 103: A=2023.0
+      Row 104: A=2022.0 | D==SUM(B104+C104) | G==SUM(E104+F104) | J==SUM(H104+I104) | M==SUM(K104+L104)
+
+  TABLE 7:
+    Row Range: 110-193
+    Total Rows: 84
+    Structure (first 5 rows):
+      Row 110: A=F6: CAPE Performance | C=2024.0
+      Row 111: C=Unit 1 | E=Unit 2
+      Row 112: A=Subject | B=Gender | C=No. sitting | D=No. achieving Grades      I -  | E=No. sitting | F=No. achieving Grades      I -  | H= 
+      Row 113: A=Accounting | B=M
+      Row 114: B=F
+
+FORMULAS (24 found):
+  Pattern: =SUM
+    - D8: =SUM(B8:C8)
+    - J8: =SUM(H8:I8)
+    - D9: =SUM(B9:C9)
+
+COMMENTS (1 found):
+  A4: ======
+ID#AAABrHQqYjY
+Keith Thomas    (2025-09-13 17:20:10)
+@royston.emmanuel@oecs.int   Given that 
+
+
+====================================================================================================
+SHEET: Financial 
+====================================================================================================
+
+Academic Year: 2023-2024
+Dimensions: A1:Z1000
+Data Range: Rows 1-1000, Columns A-Z
+Merged Cells: 11
+
+NUMBER OF DATA TABLES IDENTIFIED: 5
+
+  TABLE 1:
+    Row Range: 6-13
+    Total Rows: 8
+    Structure (first 5 rows):
+      Row 6: B=Programme | C=Target Population | D=Number Participating | E=Total amount spent | F=Cost per child
+      Row 7: B=School Feeding Programme | C=Public Primary and Preschool | F==E7/D7
+      Row 8: B=Textbook Rental Programme | C=Primary Schools | F==E8/D8
+      Row 9: B=Textbook Rental Programme | C=Secondary Schools (Form's 1-5) | F==E9/D9
+      Row 10: B=Government Transfer Grant | C=Primary to Secondary Schools | F==E10/D10
+
+  TABLE 2:
+    Row Range: 17-26
+    Total Rows: 10
+    Structure (first 5 rows):
+      Row 17: C=Recurrent  | D=Capital | E=Total
+      Row 18: B=Pre-Primary/Daycare | E==SUM(C18:D18)
+      Row 19: B=Primary | E==SUM(C19:D19)
+      Row 20: B=Secondary | E==SUM(C20:D20)
+      Row 21: B=TVET | E==SUM(C21:D21)
+
+  TABLE 3:
+    Row Range: 31-42
+    Total Rows: 12
+    Structure (first 5 rows):
+      Row 31: B=Description
+      Row 32: B=National Budget ($EC): | E=2. Government’s allocation for
+      Row 33: B=Recurrent 
+      Row 34: B=Capital | F=Education | G=Total Government Expenditure
+      Row 35: B=Total | E=Recurrent Expentiture | F==C26 | G==C33
+
+  TABLE 4:
+    Row Range: 46-62
+    Total Rows: 17
+    Structure (first 5 rows):
+      Row 46: B=Allocation of Education budget
+      Row 47: B=Pre-primary | C==E18
+      Row 48: B=Primary | C==E19
+      Row 49: B=Secondary | C==E20
+      Row 50: B=Special Education | C==E22
+
+  TABLE 5:
+    Row Range: 64-68
+    Total Rows: 5
+    Structure (first 5 rows):
+      Row 64: B=Expenditure per child on Educa
+      Row 65: B=Pre-primary | C=-
+      Row 66: B=Primary | C==C48/(12865+3142)
+      Row 67: B=Secondary | C==C49/9603
+      Row 68: B=Tertiary | C==C51/2308
+
+FORMULAS (42 found):
+  Pattern: =E7/D7
+    - F7: =E7/D7
+  Pattern: =E8/D8
+    - F8: =E8/D8
+  Pattern: =E9/D9
+    - F9: =E9/D9
+  Pattern: =E10/D10
+    - F10: =E10/D10
+  Pattern: =E11/D11
+    - F11: =E11/D11
+  Pattern: =E12/D12
+    - F12: =E12/D12
+  Pattern: =E13/D13
+    - F13: =E13/D13
+  Pattern: =SUM
+    - E18: =SUM(C18:D18)
+    - E19: =SUM(C19:D19)
+    - E20: =SUM(C20:D20)
+  Pattern: =C26
+    - F35: =C26
+  Pattern: =C33
+    - G35: =C33
+  Pattern: =C40
+    - F36: =C40
+
+
+====================================================================================================
+SHEET: Population
+====================================================================================================
+
+Academic Year: 2023.0
+Dimensions: A1:K1000
+Data Range: Rows 1-1000, Columns A-K
+Merged Cells: 3
+
+NUMBER OF DATA TABLES IDENTIFIED: 1
+
+  TABLE 1:
+    Row Range: 4-93
+    Total Rows: 90
+    Structure (first 5 rows):
+      Row 4: C=2023.0
+      Row 5: B=Ages | C=Male | D=Female | E=Total
+      Row 6: B=0.0 | E==SUM(C6:D6)
+      Row 7: B=1.0 | E==SUM(C7:D7)
+      Row 8: B=2.0 | E==SUM(C8:D8)
+
+FORMULAS (90 found):
+  Pattern: =SUM
+    - E6: =SUM(C6:D6)
+    - E7: =SUM(C7:D7)
+    - E8: =SUM(C8:D8)
+
+
+====================================================================================================
+SHEET: Sheet1
+====================================================================================================
+
+Academic Year: 2023.0
+Dimensions: A1:H21
+Data Range: Rows 1-21, Columns A-H
+Merged Cells: 0
+
+NUMBER OF DATA TABLES IDENTIFIED: 0
+
+
+
+Report saved to: C:\Users\Clendon\oecs-education-dashboard\comprehensive_template_report.txt

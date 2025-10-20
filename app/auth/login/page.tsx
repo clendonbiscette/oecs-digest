@@ -30,16 +30,24 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      // Update last login
-      if (data.user) {
+      if (!data.user) {
+        throw new Error('No user returned from login')
+      }
+
+      // Update last login (don't block on error)
+      try {
         await supabase
           .from('user_profiles')
           .update({ last_login: new Date().toISOString() })
           .eq('id', data.user.id)
+      } catch (updateError) {
+        console.warn('Failed to update last login:', updateError)
       }
 
+      // Redirect to data entry
       router.push('/data-entry')
     } catch (error: any) {
+      console.error('Caught error:', error)
       setError(error.message || 'An error occurred during login')
     } finally {
       setLoading(false)

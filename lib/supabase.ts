@@ -154,7 +154,7 @@ export async function getCurrentUser() {
 
 export async function getUserProfile(userId: string) {
   const { data, error } = await supabase
-    .from('users')
+    .from('user_profiles')
     .select('*, countries(*)')
     .eq('id', userId)
     .single()

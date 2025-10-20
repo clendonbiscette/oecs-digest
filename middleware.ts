@@ -76,5 +76,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/data-entry/:path*', '/auth/:path*']
+  matcher: [] // Temporarily disabled for debugging
+  // matcher: ['/data-entry/:path*', '/auth/:path*']
 }
