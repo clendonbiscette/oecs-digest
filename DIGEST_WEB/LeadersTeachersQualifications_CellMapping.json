@@ -1,0 +1,599 @@
+{
+  "worksheet_name": "LeadersTeachersQualifications",
+  "academic_year": "2023-2024",
+  "tables": {
+    "B1": {
+      "title": "B1. Qualifications & Training: Pre-schools",
+      "cell_range": "A5:M22",
+      "roles": [
+        "Administrators",
+        "Deputy Principal",
+        "Care Givers"
+      ],
+      "role_columns": {
+        "Administrators": {
+          "male": "E",
+          "female": "F",
+          "total": "G"
+        },
+        "Deputy Principal": {
+          "male": "H",
+          "female": "I",
+          "total": "J"
+        },
+        "Care Givers": {
+          "male": "K",
+          "female": "L",
+          "total": "M"
+        }
+      },
+      "school_types": {
+        "Public": {
+          "rows": [
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "qualifications": [
+            {
+              "row": 8,
+              "level": "Graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 9,
+              "level": "Graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 10,
+              "level": "Non-graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 11,
+              "level": "Non-graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 12,
+              "level": "Unknown",
+              "training": null
+            }
+          ]
+        },
+        "Private": {
+          "rows": [
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "qualifications": [
+            {
+              "row": 13,
+              "level": "Graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 14,
+              "level": "Graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 15,
+              "level": "Non-graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 16,
+              "level": "Non-graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 17,
+              "level": "Unknown",
+              "training": null
+            }
+          ]
+        },
+        "Totals": {
+          "rows": [
+            18,
+            19,
+            20,
+            21,
+            22
+          ],
+          "calculated": true
+        }
+      }
+    },
+    "B2": {
+      "title": "B2. Qualifications & Training: Primary",
+      "cell_range": "A24:M42",
+      "roles": [
+        "Principal",
+        "Deputy Principal",
+        "Teachers"
+      ],
+      "role_columns": {
+        "Principal": {
+          "male": "E",
+          "female": "F",
+          "total": "G"
+        },
+        "Deputy Principal": {
+          "male": "H",
+          "female": "I",
+          "total": "J"
+        },
+        "Teachers": {
+          "male": "K",
+          "female": "L",
+          "total": "M"
+        }
+      },
+      "school_types": {
+        "Public": {
+          "rows": [
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
+          "qualifications": [
+            {
+              "row": 27,
+              "level": "Graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 28,
+              "level": "Graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 29,
+              "level": "Non-graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 30,
+              "level": "Non-graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 31,
+              "level": "Unknown",
+              "training": null
+            }
+          ]
+        },
+        "Private": {
+          "rows": [
+            32,
+            33,
+            34,
+            35,
+            36
+          ],
+          "qualifications": [
+            {
+              "row": 32,
+              "level": "Graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 33,
+              "level": "Graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 34,
+              "level": "Non-graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 35,
+              "level": "Non-graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 36,
+              "level": "Unknown",
+              "training": null
+            }
+          ]
+        },
+        "Totals": {
+          "rows": [
+            37,
+            38,
+            39,
+            40,
+            41
+          ],
+          "calculated": true
+        }
+      },
+      "additional_fields": {
+        "leadership_degree": {
+          "row": 42,
+          "description": "No. with at least a degree in leadership/management/Administration",
+          "input_cells": {
+            "E": "male",
+            "F": "female"
+          },
+          "formula_cells": [
+            "G",
+            "H",
+            "I",
+            "J",
+            "M"
+          ]
+        }
+      }
+    },
+    "B3": {
+      "title": "B3. Qualifications & Training: Secondary",
+      "cell_range": "A46:M65",
+      "roles": [
+        "Principal",
+        "Deputy Principal",
+        "Teachers"
+      ],
+      "role_columns": {
+        "Principal": {
+          "male": "E",
+          "female": "F",
+          "total": "G"
+        },
+        "Deputy Principal": {
+          "male": "H",
+          "female": "I",
+          "total": "J"
+        },
+        "Teachers": {
+          "male": "K",
+          "female": "L",
+          "total": "M"
+        }
+      },
+      "school_types": {
+        "Public": {
+          "rows": [
+            49,
+            50,
+            51,
+            52,
+            53
+          ],
+          "qualifications": [
+            {
+              "row": 49,
+              "level": "Graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 50,
+              "level": "Graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 51,
+              "level": "Non-graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 52,
+              "level": "Non-graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 53,
+              "level": "Unknown",
+              "training": null
+            }
+          ]
+        },
+        "Private": {
+          "rows": [
+            54,
+            55,
+            56,
+            57,
+            58
+          ],
+          "qualifications": [
+            {
+              "row": 54,
+              "level": "Graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 55,
+              "level": "Graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 56,
+              "level": "Non-graduate",
+              "training": "Trained"
+            },
+            {
+              "row": 57,
+              "level": "Non-graduate",
+              "training": "Untrained"
+            },
+            {
+              "row": 58,
+              "level": "Unknown",
+              "training": null
+            }
+          ]
+        },
+        "Totals": {
+          "rows": [
+            59,
+            60,
+            61,
+            62,
+            63,
+            64
+          ],
+          "calculated": true
+        }
+      },
+      "additional_fields": {
+        "leadership_degree": {
+          "row": 65,
+          "description": "No. with at least a degree in leadership/management/Administration",
+          "input_cells": {
+            "E": "principal_male",
+            "F": "principal_female",
+            "H": "deputy_male",
+            "I": "deputy_female"
+          },
+          "formula_cells": [
+            "G",
+            "J"
+          ]
+        }
+      }
+    },
+    "B4": {
+      "title": "B4. Qualifications & Training: Post-secondary/Tertiary",
+      "cell_range": "A67:L75",
+      "subtitle": "National College (s)",
+      "roles": [
+        "Principal",
+        "Deputy Principal",
+        "Teachers"
+      ],
+      "role_columns": {
+        "Principal": {
+          "male": "D",
+          "female": "E",
+          "total": "F"
+        },
+        "Deputy Principal": {
+          "male": "G",
+          "female": "H",
+          "total": "I"
+        },
+        "Teachers": {
+          "male": "J",
+          "female": "K",
+          "total": "L"
+        }
+      },
+      "school_types": {
+        "Public": {
+          "rows": [
+            70,
+            71
+          ],
+          "qualifications": [
+            {
+              "row": 70,
+              "level": "Graduate"
+            },
+            {
+              "row": 71,
+              "level": "Non-graduate"
+            }
+          ]
+        },
+        "Private": {
+          "rows": [
+            72,
+            73
+          ],
+          "qualifications": [
+            {
+              "row": 72,
+              "level": "Graduate"
+            },
+            {
+              "row": 73,
+              "level": "Non-graduate"
+            }
+          ]
+        },
+        "Totals": {
+          "rows": [
+            74,
+            75
+          ],
+          "calculated": true
+        }
+      },
+      "note": "This table only tracks Graduate vs Non-graduate, NOT Trained/Untrained status"
+    },
+    "B5": {
+      "title": "B5. Teachers: Highest Academic Qualifications",
+      "cell_range": "A78:M90",
+      "education_stages": {
+        "Pre-schools & Daycares": {
+          "male": "B",
+          "female": "C",
+          "total": "D"
+        },
+        "Primary": {
+          "male": "E",
+          "female": "F",
+          "total": "G"
+        },
+        "Secondary": {
+          "male": "H",
+          "female": "I",
+          "total": "J"
+        },
+        "Post-secondary/Tertiary": {
+          "male": "K",
+          "female": "L",
+          "total": "M"
+        }
+      },
+      "qualification_levels": [
+        {
+          "row": 81,
+          "qualification": "CSEC/O-Level"
+        },
+        {
+          "row": 82,
+          "qualification": "CAPE/A-Levels"
+        },
+        {
+          "row": 83,
+          "qualification": "Certificate"
+        },
+        {
+          "row": 84,
+          "qualification": "Associate degree"
+        },
+        {
+          "row": 85,
+          "qualification": "Bachelors degree"
+        },
+        {
+          "row": 86,
+          "qualification": "Post-graduate degree"
+        },
+        {
+          "row": 87,
+          "qualification": "Masters degree"
+        },
+        {
+          "row": 88,
+          "qualification": "Other"
+        },
+        {
+          "row": 89,
+          "qualification": "Unknown/Unavailable"
+        }
+      ],
+      "total_row": 90
+    },
+    "B6": {
+      "title": "B6- Specialist Teachers",
+      "cell_range": "A91:E108",
+      "columns": {
+        "specialization": "A",
+        "male": "C",
+        "female": "D",
+        "total": "E"
+      },
+      "specializations": [
+        {
+          "row": 94,
+          "area": "Agriculture"
+        },
+        {
+          "row": 95,
+          "area": "French"
+        },
+        {
+          "row": 96,
+          "area": "Home Economics"
+        },
+        {
+          "row": 97,
+          "area": "I T"
+        },
+        {
+          "row": 98,
+          "area": "Music"
+        },
+        {
+          "row": 99,
+          "area": "PE & Sports"
+        },
+        {
+          "row": 100,
+          "area": "Plumbing"
+        },
+        {
+          "row": 101,
+          "area": "Reading"
+        },
+        {
+          "row": 102,
+          "area": "Spanish"
+        },
+        {
+          "row": 103,
+          "area": "Special Education"
+        },
+        {
+          "row": 104,
+          "area": "Threatre Arts"
+        },
+        {
+          "row": 105,
+          "area": "HFLE"
+        },
+        {
+          "row": 106,
+          "area": "(Reserved - Additional Specialty 1)"
+        },
+        {
+          "row": 107,
+          "area": "(Reserved - Additional Specialty 2)"
+        }
+      ],
+      "total_row": 108
+    },
+    "B7": {
+      "title": "B7: Continuous Professional Development (CPD)",
+      "cell_range": "A111:J115",
+      "metrics": [
+        {
+          "row": 112,
+          "description": "Number of Primary school principals engaged in at least 24 number of hours CPD annually",
+          "input_cell": "J112"
+        },
+        {
+          "row": 113,
+          "description": "Number of Secondary school principals engaged in at least 24 number of hours CPD annually",
+          "input_cell": "J113"
+        },
+        {
+          "row": 114,
+          "description": "Number of Primary school teachers engaged in at least 24 number of hours CPD annually",
+          "input_cell": "J114"
+        },
+        {
+          "row": 115,
+          "description": "Number of Secondary school teachers engaged in at least 24 number of hours CPD annually",
+          "input_cell": "J115"
+        }
+      ]
+    }
+  }
+}
