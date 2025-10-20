@@ -2,24 +2,55 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
-  BookOpen, 
-  GraduationCap, 
-  Users, 
-  Building2, 
-  BarChart3, 
-  PieChart, 
-  TrendingUp, 
+import { Button } from "@/components/ui/button"
+import {
+  BookOpen,
+  GraduationCap,
+  Users,
+  Building2,
+  BarChart3,
+  PieChart,
+  TrendingUp,
   MapPin,
   Database,
   FileText,
   Settings,
-  Globe
+  Globe,
+  LogIn,
+  UserPlus
 } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+import { supabase } from "@/lib/supabase"
 
 export default function HomePage() {
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Check for active session
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+      setLoading(false)
+    })
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
   const navigationCards = [
+    {
+      title: "Data Entry Portal",
+      description: "Member state statisticians: Submit your education data",
+      icon: <Database className="h-8 w-8" />,
+      href: "/data-entry",
+      color: "bg-[#4DA11D]",
+      stats: "Secure Access"
+    },
     {
       title: "Education Dashboard",
       description: "Comprehensive analysis of educational institutions across the OECS",
@@ -72,6 +103,48 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
+      {/* Top Navigation Bar */}
+      <div className="border-b bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <img src="/favlogo.png" alt="OECS Logo" className="h-8 w-8" />
+              <span className="font-semibold text-gray-900">OECS Education</span>
+            </div>
+            <div className="flex items-center gap-3">
+              {loading ? (
+                <div className="animate-pulse h-8 w-24 bg-gray-200 rounded"></div>
+              ) : user ? (
+                <>
+                  <span className="text-sm text-gray-600">Welcome, {user.email}</span>
+                  <Link href="/data-entry">
+                    <Button variant="default" size="sm" className="bg-[#4DA11D] hover:bg-[#3d8015]">
+                      <Database className="h-4 w-4 mr-2" />
+                      Dashboard
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth/login">
+                    <Button variant="outline" size="sm">
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/auth/signup">
+                    <Button size="sm" className="bg-[#4DA11D] hover:bg-[#3d8015]">
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
