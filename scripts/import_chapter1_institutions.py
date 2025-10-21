@@ -15,6 +15,12 @@ Usage:
 
 import os
 import sys
+import io
+
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 from pathlib import Path
 import openpyxl
 from dotenv import load_dotenv
@@ -23,8 +29,9 @@ from supabase import create_client, Client
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from .env.local
+env_path = Path(__file__).parent.parent / '.env.local'
+load_dotenv(dotenv_path=env_path)
 
 # Supabase configuration
 SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
@@ -167,9 +174,11 @@ def parse_table_1_1(ws, academic_year_id: str):
             'secondary_private_church': 0,
             'secondary_private_non_affiliated': 0,
             'special_ed_public': 0,
-            'special_ed_private': 0,
+            'special_ed_private_church': 0,
+            'special_ed_private_non_affiliated': 0,
             'tvet_public': 0,
-            'tvet_private': 0,
+            'tvet_private_church': 0,
+            'tvet_private_non_affiliated': 0,
             'post_secondary_public': 0,
             'post_secondary_private': 0,
         })
@@ -221,9 +230,11 @@ def parse_table_1_2(ws, academic_year_id: str):
                 'secondary_private_church': 0,
                 'secondary_private_non_affiliated': 0,
                 'special_ed_public': 0,
-                'special_ed_private': 0,
+                'special_ed_private_church': 0,
+                'special_ed_private_non_affiliated': 0,
                 'tvet_public': 0,
-                'tvet_private': 0,
+                'tvet_private_church': 0,
+                'tvet_private_non_affiliated': 0,
             }
 
         # Extract primary school data (columns vary by file)
@@ -303,9 +314,11 @@ def merge_institution_data(table1_data, table2_data, table3_data):
                 'secondary_private_church': record.get('secondary_private_church', 0),
                 'secondary_private_non_affiliated': record.get('secondary_private_non_affiliated', 0),
                 'special_ed_public': record.get('special_ed_public', 0),
-                'special_ed_private': record.get('special_ed_private', 0),
+                'special_ed_private_church': record.get('special_ed_private_church', 0),
+                'special_ed_private_non_affiliated': record.get('special_ed_private_non_affiliated', 0),
                 'tvet_public': record.get('tvet_public', 0),
-                'tvet_private': record.get('tvet_private', 0),
+                'tvet_private_church': record.get('tvet_private_church', 0),
+                'tvet_private_non_affiliated': record.get('tvet_private_non_affiliated', 0),
             })
 
     # Merge Table 1.3 (Post-Secondary)

@@ -1,0 +1,133 @@
+
+{
+  "worksheet": "Student Enrolment",
+  "overview": {
+    "total_tables": 8,
+    "current_year": "2023-2024",
+    "prior_year": "2022-2023",
+    "reference_date": "October 15th"
+  },
+  "tables": {
+    "D1_EarlyChildhood": {
+      "rows": "3-22",
+      "age_groups": ["<1yr", "1yr", "2yr", "3yr", "4yr", ">4yr", "AgeUnknown"],
+      "structure": "PUBLIC (A-E) | PRIVATE (G-K) | TOTAL (N-O)",
+      "public_input_males": ["C6", "C8", "C10", "C12", "C14", "C16", "C18"],
+      "public_input_females": ["C7", "C9", "C11", "C13", "C15", "C17", "C19"],
+      "private_input_males": ["I6", "I8", "I10", "I12", "I14", "I16", "I18"],
+      "private_input_females": ["I7", "I9", "I11", "I13", "I15", "I17", "I19"],
+      "public_totals": {
+        "males": "C20=SUM(C6,C8,C10,C12,C14,C16,C18)",
+        "females": "C21=SUM(C7,C9,C11,C13,C15,C17,C19)",
+        "combined": "E20=SUM(C20,C21), E21=SUM(C20,C21)"
+      },
+      "private_totals": {
+        "males": "I20=SUM(I6,I8,I10,I12,I14,I16,I18)",
+        "females": "I21=SUM(I7,I9,I11,I13,I15,I17,I19)",
+        "combined": "K20=SUM(I20,I21), K21=SUM(I20,I21)"
+      },
+      "grand_total": {
+        "public": "C22=SUM(C20:C21)",
+        "private": "I22=SUM(I20:I21)"
+      }
+    },
+    "D2_SpecialSchools": {
+      "rows": "25-42",
+      "age_groups": ["<=5yr", "6-10yr", "11-15yr", "16-20yr", "20+yr", "AgeUnknown"],
+      "structure": "PUBLIC (A-E) | PRIVATE (G-K) | TOTAL (N-O)",
+      "public_input_males": ["C28", "C30", "C32", "C34", "C36", "C38"],
+      "public_input_females": ["C29", "C31", "C33", "C35", "C37", "C39"],
+      "private_input_males": ["I28", "I30", "I32", "I34", "I36", "I38"],
+      "private_input_females": ["I29", "I31", "I33", "I35", "I37", "I39"]
+    },
+    "D3_Primary_2023-24": {
+      "rows": "45-79",
+      "grades": ["K", "G1", "G2", "G3", "G4", "G5", "G6"],
+      "age_groups": ["<5yr", "5yr", "6yr", "7yr", "8yr", "9yr", "10yr", "11yr", "12yr", "13yr", "14yr", "15yr", "16+yr", "AgeUnknown"],
+      "structure": "PUBLIC (A-K) | PRIVATE (M-P)",
+      "data_entry_pattern": "Rows 49-76: 14 ages x 2 sexes",
+      "public_data": {
+        "males": "C49:I49, C51:I51, C53:I53, ... C75:I75",
+        "females": "C50:I50, C52:I52, C54:I54, ... C76:I76"
+      },
+      "totals_rows": {
+        "row_77": "Males total by grade (C77-I77)",
+        "row_78": "Females total by grade (C78-I78)",
+        "row_79": "Combined total by grade (C79-I79)"
+      },
+      "row_total_formula": "J49=SUM(C49:I49), J77=SUM(C49,C51,C53...C75)",
+      "both_formula": "K49=SUM(J49:J50)"
+    },
+    "D4_Secondary_2023-24": {
+      "rows": "82-110",
+      "forms": ["Form1.0", "Form2.0", "Form3.0", "Form4.0", "Form5.0"],
+      "age_groups": ["<11yr", "11yr", "12yr", "13yr", "14yr", "15yr", "16yr", "17yr", "18yr", "19+yr", "AgeUnknown"],
+      "structure": "PUBLIC (A-I) | PRIVATE (M-N)",
+      "data_entry_pattern": "Rows 86-107: 11 ages x 2 sexes",
+      "public_data": {
+        "males": "C86:G86, C88:G88, C90:G90, ... C106:G106",
+        "females": "C87:G87, C89:G89, C91:G91, ... C107:G107"
+      },
+      "subtotal_formula": "H86=SUM(C86:G86)",
+      "both_formula": "I86=SUM(H86:H87)",
+      "totals_rows": {
+        "row_108": "Males total by form (C108-G108)",
+        "row_109": "Females total by form (C109-G109)",
+        "row_110": "Combined total by form (C110-G110)"
+      }
+    },
+    "D5_PostSecondary_2023-24": {
+      "rows": "113-145",
+      "programmes": ["TVET", "CAPE/A-Levels", "Hospitality", "Other", "Tertiary"],
+      "age_groups": ["<16yr", "16yr", "17yr", "18yr", "19yr", "20yr", "21yr", "22yr", "23yr", "24yr", "25yr", ">25yr", "AgeUnknown"],
+      "structure": "National Level (A-I), No Public/Private distinction",
+      "data_entry_pattern": "Rows 117-142: 13 ages x 2 sexes",
+      "male_data": "C117:G117, C119:G119, C121:G121, ... C141:G141",
+      "female_data": "C118:G118, C120:G120, C122:G122, ... C142:G142",
+      "subtotal_formula": "H117=SUM(C117:G117)",
+      "both_formula": "I117=SUM(H117:H118)",
+      "totals_rows": {
+        "row_143": "Males total by programme (C143-G143)",
+        "row_144": "Females total by programme (C144-G144)",
+        "row_145": "Combined total by programme (C145-G145)"
+      }
+    },
+    "D6_Primary_2022-23": {
+      "rows": "150-184",
+      "note": "Identical structure to D3",
+      "data_entry_pattern": "Rows 154-181: 14 ages x 2 sexes",
+      "male_data": "C154:I154, C156:I156, ... C180:I180",
+      "female_data": "C155:I155, C157:I157, ... C181:I181"
+    },
+    "D7_Secondary_2022-23": {
+      "rows": "187-215",
+      "note": "Identical structure to D4",
+      "data_entry_pattern": "Rows 191-212: 11 ages x 2 sexes",
+      "male_data": "C191:G191, C193:G193, ... C211:G211",
+      "female_data": "C192:G192, C194:G194, ... C212:G212"
+    },
+    "D8_PostSecondary_2022-23": {
+      "rows": "218-250",
+      "note": "Identical structure to D5",
+      "data_entry_pattern": "Rows 222-247: 13 ages x 2 sexes",
+      "male_data": "C222:G222, C224:G224, ... C246:G246",
+      "female_data": "C223:G223, C225:G225, ... C247:G247"
+    }
+  },
+  "patterns": {
+    "row_pairing": "Odd rows = Males, Even rows = Females",
+    "column_entry": "Each row spans columns for categories (grades/forms/programmes)",
+    "subtotals": "Level 1: Row sums | Level 2: Gender sums | Level 3: Category totals | Level 4: Grand totals",
+    "public_private_split": "Tables 1-4, 6-7 have separate PUBLIC and PRIVATE sections; Tables 5, 8 are NATIONAL"
+  },
+  "data_entry_checklist": [
+    "Table 1: Early Childhood (current year) - REQUIRED",
+    "Table 2: Special Schools (current year) - REQUIRED",
+    "Table 3: Primary 2023-24 - REQUIRED",
+    "Table 4: Secondary 2023-24 - REQUIRED",
+    "Table 5: Post-Secondary 2023-24 - REQUIRED",
+    "Table 6: Primary 2022-23 - OPTIONAL (for comparison)",
+    "Table 7: Secondary 2022-23 - OPTIONAL (for comparison)",
+    "Table 8: Post-Secondary 2022-23 - OPTIONAL (for comparison)"
+  ]
+}
