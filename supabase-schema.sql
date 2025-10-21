@@ -265,17 +265,17 @@ CREATE POLICY "Countries are viewable by everyone" ON countries
 CREATE POLICY "Academic years are viewable by everyone" ON academic_years
     FOR SELECT USING (true);
 
--- User Profiles: Users can view their own profile, admins can view all
+-- User Profiles: Users can view their own profile
+-- Note: Removed admin policy to prevent infinite recursion
+-- Admins should use service role key for viewing all profiles
 CREATE POLICY "Users can view own profile" ON user_profiles
     FOR SELECT USING (auth.uid() = id);
 
-CREATE POLICY "Admins can view all profiles" ON user_profiles
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM user_profiles
-            WHERE id = auth.uid() AND role = 'admin'
-        )
-    );
+CREATE POLICY "Users can update own profile" ON user_profiles
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own profile" ON user_profiles
+    FOR INSERT WITH CHECK (auth.uid() = id);
 
 -- Data Submissions: Statisticians can view/edit their country, admins can view all
 CREATE POLICY "Statisticians can view own country submissions" ON data_submissions
