@@ -100,18 +100,25 @@ export async function getEducationSummary(): Promise<EducationSummary[]> {
       return []
     }
 
+    // Get all countries to map IDs to codes/names
+    const { data: allCountries } = await supabase.from('countries').select('*').execute()
+    const countryMap = new Map(allCountries?.map(c => [c.id, c]) || [])
+
     // Transform to EducationSummary format
-    const summary: EducationSummary[] = institutions.map((inst: any) => ({
-      country_code: inst.countries.country_code,
-      country_name: inst.countries.country_name,
-      total_daycare_centres: inst.daycare_public + inst.daycare_private_church + inst.daycare_private_non_affiliated,
-      total_preschools: inst.preschool_public + inst.preschool_private_church + inst.preschool_private_non_affiliated,
-      total_primary_schools: inst.primary_public + inst.primary_private_church + inst.primary_private_non_affiliated,
-      total_secondary_schools: inst.secondary_public + inst.secondary_private_church + inst.secondary_private_non_affiliated,
-      total_special_ed_schools: inst.special_ed_public + inst.special_ed_private_church + inst.special_ed_private_non_affiliated,
-      total_tvet_institutions: inst.tvet_public + inst.tvet_private_church + inst.tvet_private_non_affiliated,
-      total_post_secondary: inst.post_secondary_public + inst.post_secondary_private,
-    }))
+    const summary: EducationSummary[] = institutions.map((inst: any) => {
+      const country = countryMap.get(inst.country_id)
+      return {
+        country_code: country?.country_code || 'UNKNOWN',
+        country_name: country?.country_name || 'Unknown',
+        total_daycare_centres: inst.daycare_public + inst.daycare_private_church + inst.daycare_private_non_affiliated,
+        total_preschools: inst.preschool_public + inst.preschool_private_church + inst.preschool_private_non_affiliated,
+        total_primary_schools: inst.primary_public + inst.primary_private_church + inst.primary_private_non_affiliated,
+        total_secondary_schools: inst.secondary_public + inst.secondary_private_church + inst.secondary_private_non_affiliated,
+        total_special_ed_schools: inst.special_ed_public + inst.special_ed_private_church + inst.special_ed_private_non_affiliated,
+        total_tvet_institutions: inst.tvet_public + inst.tvet_private_church + inst.tvet_private_non_affiliated,
+        total_post_secondary: inst.post_secondary_public + inst.post_secondary_private,
+      }
+    })
 
     return summary.sort((a, b) => a.country_name.localeCompare(b.country_name))
   } catch (error) {
@@ -161,20 +168,8 @@ export async function getEarlyChildhoodData(): Promise<EarlyChildhoodData[]> {
 
     const { data: institutions, error } = await supabase
       .from('institutions')
-      .select(`
-        daycare_public,
-        daycare_private_church,
-        daycare_private_non_affiliated,
-        preschool_public,
-        preschool_private_church,
-        preschool_private_non_affiliated,
-        countries (
-          country_code,
-          country_name
-        )
-      `)
+      .select('*')
       .eq('academic_year_id', activeYear.id)
-      .order('countries(country_name)')
 
     if (error) {
       console.error('Error fetching early childhood data:', error)
@@ -183,18 +178,25 @@ export async function getEarlyChildhoodData(): Promise<EarlyChildhoodData[]> {
 
     if (!institutions) return []
 
-    return institutions.map((inst: any) => ({
-      country_code: inst.countries.country_code,
-      country_name: inst.countries.country_name,
-      daycare_public: inst.daycare_public,
-      daycare_private_church: inst.daycare_private_church,
-      daycare_private_non_affiliated: inst.daycare_private_non_affiliated,
-      daycare_total: inst.daycare_public + inst.daycare_private_church + inst.daycare_private_non_affiliated,
-      preschool_public: inst.preschool_public,
-      preschool_private_church: inst.preschool_private_church,
-      preschool_private_non_affiliated: inst.preschool_private_non_affiliated,
-      preschool_total: inst.preschool_public + inst.preschool_private_church + inst.preschool_private_non_affiliated,
-    }))
+    // Get all countries
+    const { data: allCountries } = await supabase.from('countries').select('*').execute()
+    const countryMap = new Map(allCountries?.map(c => [c.id, c]) || [])
+
+    return institutions.map((inst: any) => {
+      const country = countryMap.get(inst.country_id)
+      return {
+        country_code: country?.country_code || 'UNKNOWN',
+        country_name: country?.country_name || 'Unknown',
+        daycare_public: inst.daycare_public,
+        daycare_private_church: inst.daycare_private_church,
+        daycare_private_non_affiliated: inst.daycare_private_non_affiliated,
+        daycare_total: inst.daycare_public + inst.daycare_private_church + inst.daycare_private_non_affiliated,
+        preschool_public: inst.preschool_public,
+        preschool_private_church: inst.preschool_private_church,
+        preschool_private_non_affiliated: inst.preschool_private_non_affiliated,
+        preschool_total: inst.preschool_public + inst.preschool_private_church + inst.preschool_private_non_affiliated,
+      }
+    }).sort((a, b) => a.country_name.localeCompare(b.country_name))
   } catch (error) {
     console.error('Unexpected error in getEarlyChildhoodData:', error)
     return []
@@ -220,26 +222,8 @@ export async function getEducationalInstitutionsData(): Promise<EducationalInsti
 
     const { data: institutions, error } = await supabase
       .from('institutions')
-      .select(`
-        primary_public,
-        primary_private_church,
-        primary_private_non_affiliated,
-        secondary_public,
-        secondary_private_church,
-        secondary_private_non_affiliated,
-        special_ed_public,
-        special_ed_private_church,
-        special_ed_private_non_affiliated,
-        tvet_public,
-        tvet_private_church,
-        tvet_private_non_affiliated,
-        countries (
-          country_code,
-          country_name
-        )
-      `)
+      .select('*')
       .eq('academic_year_id', activeYear.id)
-      .order('countries(country_name)')
 
     if (error) {
       console.error('Error fetching educational institutions data:', error)
@@ -248,26 +232,33 @@ export async function getEducationalInstitutionsData(): Promise<EducationalInsti
 
     if (!institutions) return []
 
-    return institutions.map((inst: any) => ({
-      country_code: inst.countries.country_code,
-      country_name: inst.countries.country_name,
-      primary_public: inst.primary_public,
-      primary_private_church: inst.primary_private_church,
-      primary_private_non_affiliated: inst.primary_private_non_affiliated,
-      primary_total: inst.primary_public + inst.primary_private_church + inst.primary_private_non_affiliated,
-      secondary_public: inst.secondary_public,
-      secondary_private_church: inst.secondary_private_church,
-      secondary_private_non_affiliated: inst.secondary_private_non_affiliated,
-      secondary_total: inst.secondary_public + inst.secondary_private_church + inst.secondary_private_non_affiliated,
-      special_ed_public: inst.special_ed_public,
-      special_ed_private_church: inst.special_ed_private_church,
-      special_ed_private_non_affiliated: inst.special_ed_private_non_affiliated,
-      special_ed_total: inst.special_ed_public + inst.special_ed_private_church + inst.special_ed_private_non_affiliated,
-      tvet_public: inst.tvet_public,
-      tvet_private_church: inst.tvet_private_church,
-      tvet_private_non_affiliated: inst.tvet_private_non_affiliated,
-      tvet_total: inst.tvet_public + inst.tvet_private_church + inst.tvet_private_non_affiliated,
-    }))
+    // Get all countries
+    const { data: allCountries } = await supabase.from('countries').select('*').execute()
+    const countryMap = new Map(allCountries?.map(c => [c.id, c]) || [])
+
+    return institutions.map((inst: any) => {
+      const country = countryMap.get(inst.country_id)
+      return {
+        country_code: country?.country_code || 'UNKNOWN',
+        country_name: country?.country_name || 'Unknown',
+        primary_public: inst.primary_public,
+        primary_private_church: inst.primary_private_church,
+        primary_private_non_affiliated: inst.primary_private_non_affiliated,
+        primary_total: inst.primary_public + inst.primary_private_church + inst.primary_private_non_affiliated,
+        secondary_public: inst.secondary_public,
+        secondary_private_church: inst.secondary_private_church,
+        secondary_private_non_affiliated: inst.secondary_private_non_affiliated,
+        secondary_total: inst.secondary_public + inst.secondary_private_church + inst.secondary_private_non_affiliated,
+        special_ed_public: inst.special_ed_public,
+        special_ed_private_church: inst.special_ed_private_church,
+        special_ed_private_non_affiliated: inst.special_ed_private_non_affiliated,
+        special_ed_total: inst.special_ed_public + inst.special_ed_private_church + inst.special_ed_private_non_affiliated,
+        tvet_public: inst.tvet_public,
+        tvet_private_church: inst.tvet_private_church,
+        tvet_private_non_affiliated: inst.tvet_private_non_affiliated,
+        tvet_total: inst.tvet_public + inst.tvet_private_church + inst.tvet_private_non_affiliated,
+      }
+    }).sort((a, b) => a.country_name.localeCompare(b.country_name))
   } catch (error) {
     console.error('Unexpected error in getEducationalInstitutionsData:', error)
     return []
@@ -293,16 +284,8 @@ export async function getPostSecondaryData(): Promise<PostSecondaryData[]> {
 
     const { data: institutions, error } = await supabase
       .from('institutions')
-      .select(`
-        post_secondary_public,
-        post_secondary_private,
-        countries (
-          country_code,
-          country_name
-        )
-      `)
+      .select('*')
       .eq('academic_year_id', activeYear.id)
-      .order('countries(country_name)')
 
     if (error) {
       console.error('Error fetching post-secondary data:', error)
@@ -311,13 +294,20 @@ export async function getPostSecondaryData(): Promise<PostSecondaryData[]> {
 
     if (!institutions) return []
 
-    return institutions.map((inst: any) => ({
-      country_code: inst.countries.country_code,
-      country_name: inst.countries.country_name,
-      public_institutions: inst.post_secondary_public,
-      private_institutions: inst.post_secondary_private,
-      total: inst.post_secondary_public + inst.post_secondary_private,
-    }))
+    // Get all countries
+    const { data: allCountries } = await supabase.from('countries').select('*').execute()
+    const countryMap = new Map(allCountries?.map(c => [c.id, c]) || [])
+
+    return institutions.map((inst: any) => {
+      const country = countryMap.get(inst.country_id)
+      return {
+        country_code: country?.country_code || 'UNKNOWN',
+        country_name: country?.country_name || 'Unknown',
+        public_institutions: inst.post_secondary_public,
+        private_institutions: inst.post_secondary_private,
+        total: inst.post_secondary_public + inst.post_secondary_private,
+      }
+    }).sort((a, b) => a.country_name.localeCompare(b.country_name))
   } catch (error) {
     console.error('Unexpected error in getPostSecondaryData:', error)
     return []
