@@ -755,26 +755,26 @@ export default function StaffQualificationsPage() {
           <CardContent className="space-y-2 text-sm">
             <p><strong>Trained teacher:</strong> Has completed an accredited teaching methodology course</p>
             <p><strong>Graduate:</strong> Has a minimum undergraduate degree from an accredited institution</p>
-            <p>Complete all 7 sections (B1-B7) as per the OECS template. Totals are calculated automatically.</p>
+            <p>Complete all 7 sections as per the OECS template. Totals are calculated automatically.</p>
           </CardContent>
         </Card>
 
         <Tabs defaultValue="b1" className="w-full">
           <TabsList className="grid grid-cols-7 w-full">
-            <TabsTrigger value="b1">B1: Pre-schools</TabsTrigger>
-            <TabsTrigger value="b2">B2: Primary</TabsTrigger>
-            <TabsTrigger value="b3">B3: Secondary</TabsTrigger>
-            <TabsTrigger value="b4">B4: Tertiary</TabsTrigger>
-            <TabsTrigger value="b5">B5: Academic Qual</TabsTrigger>
-            <TabsTrigger value="b6">B6: Specialists</TabsTrigger>
-            <TabsTrigger value="b7">B7: CPD</TabsTrigger>
+            <TabsTrigger value="b1">Pre-schools</TabsTrigger>
+            <TabsTrigger value="b2">Primary</TabsTrigger>
+            <TabsTrigger value="b3">Secondary</TabsTrigger>
+            <TabsTrigger value="b4">Tertiary</TabsTrigger>
+            <TabsTrigger value="b5">Academic Qual</TabsTrigger>
+            <TabsTrigger value="b6">Specialists</TabsTrigger>
+            <TabsTrigger value="b7">CPD</TabsTrigger>
           </TabsList>
 
-          {/* B1: Pre-schools */}
+          {/* Pre-schools */}
           <TabsContent value="b1" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>B1. Qualifications & Training: Pre-schools</CardTitle>
+                <CardTitle>Qualifications & Training: Pre-schools</CardTitle>
                 <CardDescription>Public Schools</CardDescription>
               </CardHeader>
               <CardContent>{renderPreSchoolsTable('public')}</CardContent>
@@ -787,11 +787,11 @@ export default function StaffQualificationsPage() {
             </Card>
           </TabsContent>
 
-          {/* B2: Primary */}
+          {/* Primary */}
           <TabsContent value="b2" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>B2. Qualifications & Training: Primary</CardTitle>
+                <CardTitle>Qualifications & Training: Primary</CardTitle>
                 <CardDescription>Public Schools</CardDescription>
               </CardHeader>
               <CardContent>{renderPrimarySecondaryTable('primary', 'public')}</CardContent>
@@ -804,11 +804,11 @@ export default function StaffQualificationsPage() {
             </Card>
           </TabsContent>
 
-          {/* B3: Secondary */}
+          {/* Secondary */}
           <TabsContent value="b3" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>B3. Qualifications & Training: Secondary</CardTitle>
+                <CardTitle>Qualifications & Training: Secondary</CardTitle>
                 <CardDescription>Public Schools</CardDescription>
               </CardHeader>
               <CardContent>{renderPrimarySecondaryTable('secondary', 'public')}</CardContent>
@@ -821,11 +821,11 @@ export default function StaffQualificationsPage() {
             </Card>
           </TabsContent>
 
-          {/* B4: Post-Secondary */}
+          {/* Post-Secondary */}
           <TabsContent value="b4" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>B4. Qualifications & Training: Post-secondary/Tertiary</CardTitle>
+                <CardTitle>Qualifications & Training: Post-secondary/Tertiary</CardTitle>
                 <CardDescription>National Colleges - Public</CardDescription>
               </CardHeader>
               <CardContent>{renderPostSecondaryTable('public')}</CardContent>
@@ -838,33 +838,33 @@ export default function StaffQualificationsPage() {
             </Card>
           </TabsContent>
 
-          {/* B5: Teacher Academic Qualifications */}
+          {/* Teacher Academic Qualifications */}
           <TabsContent value="b5">
             <Card>
               <CardHeader>
-                <CardTitle>B5. Teachers: Highest Academic Qualifications</CardTitle>
+                <CardTitle>Teachers: Highest Academic Qualifications</CardTitle>
                 <CardDescription>Highest academic qualification by education stage</CardDescription>
               </CardHeader>
               <CardContent>{renderTeacherAcademicQualifications()}</CardContent>
             </Card>
           </TabsContent>
 
-          {/* B6: Specialist Teachers */}
+          {/* Specialist Teachers */}
           <TabsContent value="b6">
             <Card>
               <CardHeader>
-                <CardTitle>B6. Specialist Teachers</CardTitle>
+                <CardTitle>Specialist Teachers</CardTitle>
                 <CardDescription>Teachers by area of specialization</CardDescription>
               </CardHeader>
               <CardContent>{renderSpecialistTeachers()}</CardContent>
             </Card>
           </TabsContent>
 
-          {/* B7: Professional Development */}
+          {/* Professional Development */}
           <TabsContent value="b7">
             <Card>
               <CardHeader>
-                <CardTitle>B7. Continuous Professional Development (CPD)</CardTitle>
+                <CardTitle>Continuous Professional Development (CPD)</CardTitle>
                 <CardDescription>Number of staff engaged in at least 24 hours of CPD annually</CardDescription>
               </CardHeader>
               <CardContent>{renderProfessionalDevelopment()}</CardContent>
