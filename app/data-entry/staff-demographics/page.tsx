@@ -350,6 +350,130 @@ export default function StaffDemographicsPage() {
     )
   }
 
+  // Render totals for age distribution (Public + Private)
+  const renderAgeTotalsTable = (role: string) => {
+    const calculateTotal = (level: string, ageRange: string, gender: string) => {
+      const publicVal = ageData.get(ageKey(role, level, 'public', ageRange, gender)) || 0
+      const privateVal = ageData.get(ageKey(role, level, 'private', ageRange, gender)) || 0
+      return publicVal + privateVal
+    }
+
+    const calculateRowTotal = (level: string, ageRange: string) => {
+      const male = calculateTotal(level, ageRange, 'male')
+      const female = calculateTotal(level, ageRange, 'female')
+      return male + female
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-muted">
+              <th className="border p-2 text-left w-32">Age Range</th>
+              {educationLevels.map(level => (
+                <React.Fragment key={level.key}>
+                  <th className="border p-2 text-center w-20">M</th>
+                  <th className="border p-2 text-center w-20">F</th>
+                  <th className="border p-2 text-center w-20 bg-gray-200">Tot</th>
+                </React.Fragment>
+              ))}
+            </tr>
+            <tr className="bg-muted/50 text-xs">
+              <th className="border p-1"></th>
+              {educationLevels.map(level => (
+                <React.Fragment key={level.key}>
+                  <th colSpan={3} className="border p-1 text-center">{level.label}</th>
+                </React.Fragment>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {ageRanges.map(ageRange => (
+              <tr key={ageRange.key}>
+                <td className="border p-2 font-medium bg-gray-50">{ageRange.label}</td>
+                {educationLevels.map(level => (
+                  <React.Fragment key={level.key}>
+                    <td className="border p-2 text-center bg-blue-50 font-medium">
+                      {calculateTotal(level.key, ageRange.key, 'male')}
+                    </td>
+                    <td className="border p-2 text-center bg-blue-50 font-medium">
+                      {calculateTotal(level.key, ageRange.key, 'female')}
+                    </td>
+                    <td className="border p-2 text-center bg-gray-200 font-bold">
+                      {calculateRowTotal(level.key, ageRange.key)}
+                    </td>
+                  </React.Fragment>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  // Render totals for years of service (Public + Private)
+  const renderServiceTotalsTable = (role: string) => {
+    const calculateTotal = (level: string, serviceRange: string, gender: string) => {
+      const publicVal = serviceData.get(serviceKey(role, level, 'public', serviceRange, gender)) || 0
+      const privateVal = serviceData.get(serviceKey(role, level, 'private', serviceRange, gender)) || 0
+      return publicVal + privateVal
+    }
+
+    const calculateRowTotal = (level: string, serviceRange: string) => {
+      const male = calculateTotal(level, serviceRange, 'male')
+      const female = calculateTotal(level, serviceRange, 'female')
+      return male + female
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-muted">
+              <th className="border p-2 text-left w-32">Years of Service</th>
+              {educationLevels.map(level => (
+                <React.Fragment key={level.key}>
+                  <th className="border p-2 text-center w-20">M</th>
+                  <th className="border p-2 text-center w-20">F</th>
+                  <th className="border p-2 text-center w-20 bg-gray-200">Tot</th>
+                </React.Fragment>
+              ))}
+            </tr>
+            <tr className="bg-muted/50 text-xs">
+              <th className="border p-1"></th>
+              {educationLevels.map(level => (
+                <React.Fragment key={level.key}>
+                  <th colSpan={3} className="border p-1 text-center">{level.label}</th>
+                </React.Fragment>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {serviceRanges.map(serviceRange => (
+              <tr key={serviceRange.key}>
+                <td className="border p-2 font-medium bg-gray-50">{serviceRange.label}</td>
+                {educationLevels.map(level => (
+                  <React.Fragment key={level.key}>
+                    <td className="border p-2 text-center bg-blue-50 font-medium">
+                      {calculateTotal(level.key, serviceRange.key, 'male')}
+                    </td>
+                    <td className="border p-2 text-center bg-blue-50 font-medium">
+                      {calculateTotal(level.key, serviceRange.key, 'female')}
+                    </td>
+                    <td className="border p-2 text-center bg-gray-200 font-bold">
+                      {calculateRowTotal(level.key, serviceRange.key)}
+                    </td>
+                  </React.Fragment>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[#DCE8D5]">
       {/* Header */}
@@ -421,6 +545,12 @@ export default function StaffDemographicsPage() {
               </CardHeader>
               <CardContent>{renderAgeTable('principal_deputy', 'private')}</CardContent>
             </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderAgeTotalsTable('principal_deputy')}</CardContent>
+            </Card>
           </TabsContent>
 
           {/* Leaders - Years of Service */}
@@ -437,6 +567,12 @@ export default function StaffDemographicsPage() {
                 <CardDescription>Private Schools</CardDescription>
               </CardHeader>
               <CardContent>{renderServiceTable('principal_deputy', 'private')}</CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderServiceTotalsTable('principal_deputy')}</CardContent>
             </Card>
           </TabsContent>
 
@@ -455,6 +591,12 @@ export default function StaffDemographicsPage() {
               </CardHeader>
               <CardContent>{renderAgeTable('teacher', 'private')}</CardContent>
             </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderAgeTotalsTable('teacher')}</CardContent>
+            </Card>
           </TabsContent>
 
           {/* Teachers - Years of Service */}
@@ -471,6 +613,12 @@ export default function StaffDemographicsPage() {
                 <CardDescription>Private Schools</CardDescription>
               </CardHeader>
               <CardContent>{renderServiceTable('teacher', 'private')}</CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderServiceTotalsTable('teacher')}</CardContent>
             </Card>
           </TabsContent>
         </Tabs>

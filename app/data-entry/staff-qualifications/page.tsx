@@ -448,30 +448,27 @@ export default function StaffQualificationsPage() {
                 }}
               />
             </div>
-            {level === 'secondary' && (
-              <>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Deputy Principal (Male)</label>
-                  <Input type="number" min="0" className="text-center"
-                    value={leadershipData.get(leadershipKey(level, 'deputy_principal', 'male')) || 0}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0
-                      setLeadershipData(prev => new Map(prev).set(leadershipKey(level, 'deputy_principal', 'male'), val))
-                    }}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Deputy Principal (Female)</label>
-                  <Input type="number" min="0" className="text-center"
-                    value={leadershipData.get(leadershipKey(level, 'deputy_principal', 'female')) || 0}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0
-                      setLeadershipData(prev => new Map(prev).set(leadershipKey(level, 'deputy_principal', 'female'), val))
-                    }}
-                  />
-                </div>
-              </>
-            )}
+            {/* Deputy Principal fields - shown for both Primary and Secondary per Excel template */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Deputy Principal (Male)</label>
+              <Input type="number" min="0" className="text-center"
+                value={leadershipData.get(leadershipKey(level, 'deputy_principal', 'male')) || 0}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || 0
+                  setLeadershipData(prev => new Map(prev).set(leadershipKey(level, 'deputy_principal', 'male'), val))
+                }}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Deputy Principal (Female)</label>
+              <Input type="number" min="0" className="text-center"
+                value={leadershipData.get(leadershipKey(level, 'deputy_principal', 'female')) || 0}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || 0
+                  setLeadershipData(prev => new Map(prev).set(leadershipKey(level, 'deputy_principal', 'female'), val))
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -536,6 +533,186 @@ export default function StaffQualificationsPage() {
                     </td>
                   </tr>
                 ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  // Totals render functions - Calculate Public + Private aggregations
+  const renderPreSchoolsTotals = () => {
+    const qualifications = [
+      { level: 'graduate', training: 'trained', label: 'Graduate & Trained' },
+      { level: 'graduate', training: 'untrained', label: 'Graduate & Untrained' },
+      { level: 'non_graduate', training: 'trained', label: 'Non-Graduate & Trained' },
+      { level: 'non_graduate', training: 'untrained', label: 'Non-Graduate & Untrained' },
+      { level: 'unknown', training: '', label: 'Unknown' }
+    ]
+    const roles = [
+      { key: 'administrator', label: 'Administrators' },
+      { key: 'deputy_principal', label: 'Deputy Principal' },
+      { key: 'care_giver', label: 'Care Givers' }
+    ]
+
+    const calculateTotal = (role: string, qualKey: string, gender: string) => {
+      const publicVal = staffQualData.get(staffKey('pre_primary', 'public', role, qualKey, gender)) || 0
+      const privateVal = staffQualData.get(staffKey('pre_primary', 'private', role, qualKey, gender)) || 0
+      return publicVal + privateVal
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-muted">
+              <th className="border p-2 text-left">Role</th>
+              <th className="border p-2 text-left">Qualification</th>
+              <th className="border p-2 text-center w-24">Male</th>
+              <th className="border p-2 text-center w-24">Female</th>
+              <th className="border p-2 text-center w-24 bg-gray-200">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {roles.map(role => (
+              <>
+                {qualifications.map((qual, idx) => {
+                  const qualKey = qual.training ? `${qual.level}_${qual.training}` : qual.level
+                  const maleTotal = calculateTotal(role.key, qualKey, 'male')
+                  const femaleTotal = calculateTotal(role.key, qualKey, 'female')
+                  return (
+                    <tr key={`${role.key}-${qualKey}`}>
+                      {idx === 0 && (
+                        <td className="border p-2 font-medium bg-gray-50" rowSpan={qualifications.length}>
+                          {role.label}
+                        </td>
+                      )}
+                      <td className="border p-2">{qual.label}</td>
+                      <td className="border p-2 text-center bg-blue-50 font-medium">{maleTotal}</td>
+                      <td className="border p-2 text-center bg-blue-50 font-medium">{femaleTotal}</td>
+                      <td className="border p-2 text-center bg-gray-200 font-bold">{maleTotal + femaleTotal}</td>
+                    </tr>
+                  )
+                })}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  const renderPrimarySecondaryTotals = (level: string) => {
+    const qualifications = [
+      { level: 'graduate', training: 'trained', label: 'Graduate & Trained' },
+      { level: 'graduate', training: 'untrained', label: 'Graduate & Untrained' },
+      { level: 'non_graduate', training: 'trained', label: 'Non-Graduate & Trained' },
+      { level: 'non_graduate', training: 'untrained', label: 'Non-Graduate & Untrained' },
+      { level: 'unknown', training: '', label: 'Unknown' }
+    ]
+    const roles = [
+      { key: 'principal', label: 'Principal' },
+      { key: 'deputy_principal', label: 'Deputy Principal' },
+      { key: 'teacher', label: 'Teachers' }
+    ]
+
+    const calculateTotal = (role: string, qualKey: string, gender: string) => {
+      const publicVal = staffQualData.get(staffKey(level, 'public', role, qualKey, gender)) || 0
+      const privateVal = staffQualData.get(staffKey(level, 'private', role, qualKey, gender)) || 0
+      return publicVal + privateVal
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-muted">
+              <th className="border p-2 text-left">Role</th>
+              <th className="border p-2 text-left">Qualification</th>
+              <th className="border p-2 text-center w-24">Male</th>
+              <th className="border p-2 text-center w-24">Female</th>
+              <th className="border p-2 text-center w-24 bg-gray-200">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {roles.map(role => (
+              <>
+                {qualifications.map((qual, idx) => {
+                  const qualKey = qual.training ? `${qual.level}_${qual.training}` : qual.level
+                  const maleTotal = calculateTotal(role.key, qualKey, 'male')
+                  const femaleTotal = calculateTotal(role.key, qualKey, 'female')
+                  return (
+                    <tr key={`${role.key}-${qualKey}`}>
+                      {idx === 0 && (
+                        <td className="border p-2 font-medium bg-gray-50" rowSpan={qualifications.length}>
+                          {role.label}
+                        </td>
+                      )}
+                      <td className="border p-2">{qual.label}</td>
+                      <td className="border p-2 text-center bg-blue-50 font-medium">{maleTotal}</td>
+                      <td className="border p-2 text-center bg-blue-50 font-medium">{femaleTotal}</td>
+                      <td className="border p-2 text-center bg-gray-200 font-bold">{maleTotal + femaleTotal}</td>
+                    </tr>
+                  )
+                })}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  const renderPostSecondaryTotals = () => {
+    const qualifications = [
+      { key: 'graduate', label: 'Graduate' },
+      { key: 'non_graduate', label: 'Non-graduate' }
+    ]
+    const roles = [
+      { key: 'principal', label: 'Principal' },
+      { key: 'deputy_principal', label: 'Deputy Principal' },
+      { key: 'teacher', label: 'Teachers' }
+    ]
+
+    const calculateTotal = (role: string, qualKey: string, gender: string) => {
+      const publicVal = staffQualData.get(staffKey('post_secondary', 'public', role, qualKey, gender)) || 0
+      const privateVal = staffQualData.get(staffKey('post_secondary', 'private', role, qualKey, gender)) || 0
+      return publicVal + privateVal
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-muted">
+              <th className="border p-2 text-left">Role</th>
+              <th className="border p-2 text-left">Qualification</th>
+              <th className="border p-2 text-center w-24">Male</th>
+              <th className="border p-2 text-center w-24">Female</th>
+              <th className="border p-2 text-center w-24 bg-gray-200">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {roles.map(role => (
+              <>
+                {qualifications.map((qual, idx) => {
+                  const maleTotal = calculateTotal(role.key, qual.key, 'male')
+                  const femaleTotal = calculateTotal(role.key, qual.key, 'female')
+                  return (
+                    <tr key={`${role.key}-${qual.key}`}>
+                      {idx === 0 && (
+                        <td className="border p-2 font-medium bg-gray-50" rowSpan={qualifications.length}>
+                          {role.label}
+                        </td>
+                      )}
+                      <td className="border p-2">{qual.label}</td>
+                      <td className="border p-2 text-center bg-blue-50 font-medium">{maleTotal}</td>
+                      <td className="border p-2 text-center bg-blue-50 font-medium">{femaleTotal}</td>
+                      <td className="border p-2 text-center bg-gray-200 font-bold">{maleTotal + femaleTotal}</td>
+                    </tr>
+                  )
+                })}
               </>
             ))}
           </tbody>
@@ -785,6 +962,12 @@ export default function StaffQualificationsPage() {
               </CardHeader>
               <CardContent>{renderPreSchoolsTable('private')}</CardContent>
             </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderPreSchoolsTotals()}</CardContent>
+            </Card>
           </TabsContent>
 
           {/* Primary */}
@@ -801,6 +984,12 @@ export default function StaffQualificationsPage() {
                 <CardDescription>Private Schools</CardDescription>
               </CardHeader>
               <CardContent>{renderPrimarySecondaryTable('primary', 'private')}</CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderPrimarySecondaryTotals('primary')}</CardContent>
             </Card>
           </TabsContent>
 
@@ -819,6 +1008,12 @@ export default function StaffQualificationsPage() {
               </CardHeader>
               <CardContent>{renderPrimarySecondaryTable('secondary', 'private')}</CardContent>
             </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderPrimarySecondaryTotals('secondary')}</CardContent>
+            </Card>
           </TabsContent>
 
           {/* Post-Secondary */}
@@ -835,6 +1030,12 @@ export default function StaffQualificationsPage() {
                 <CardDescription>National Colleges - Private</CardDescription>
               </CardHeader>
               <CardContent>{renderPostSecondaryTable('private')}</CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="text-green-700 font-semibold">Totals (Public + Private)</CardDescription>
+              </CardHeader>
+              <CardContent>{renderPostSecondaryTotals()}</CardContent>
             </Card>
           </TabsContent>
 

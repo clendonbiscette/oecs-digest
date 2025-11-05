@@ -24,8 +24,8 @@ export default function PopulationDataEntryPage() {
   const [saving, setSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
 
-  // Age ranges from 0 to 25+
-  const ages = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+  // Age ranges from 0 to 86 (matches Excel template)
+  const ages = Array.from({ length: 87 }, (_, i) => i) // Generates [0, 1, 2, ..., 86]
 
   const [populationData, setPopulationData] = useState<Map<number, PopulationRow>>(new Map())
 
@@ -211,7 +211,7 @@ export default function PopulationDataEntryPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm">
-              Enter the population data for your country by age and sex. Age ranges from 0 to 25+ years.
+              Enter the population data for your country by age and sex. Single-year ages from 0 to 86 years.
               Totals are calculated automatically.
             </p>
           </CardContent>
@@ -237,7 +237,7 @@ export default function PopulationDataEntryPage() {
                   {ages.map(age => (
                     <tr key={age} className="hover:bg-muted/50">
                       <td className="border p-2 font-medium">
-                        {age === 25 ? '25+' : age}
+                        {age}
                       </td>
                       <td className="border p-2">
                         <Input

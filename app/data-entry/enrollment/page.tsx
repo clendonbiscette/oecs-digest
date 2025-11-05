@@ -149,7 +149,7 @@ export default function StudentEnrollmentPage() {
   // Early Childhood Table (D1)
   const renderEarlyChildhood = (ownership: string) => {
     const ageGroups = [
-      { key: 'under_1', label: '< 1 year' },
+      { key: 'under_1', label: '> 1 year' }, // Note: Excel shows "> 1 year" (likely means under 1 year old / 0-11 months)
       { key: '1', label: '1 year' },
       { key: '2', label: '2 years' },
       { key: '3', label: '3 years' },
@@ -202,6 +202,32 @@ export default function StudentEnrollmentPage() {
                 </td>
               </tr>
             ))}
+            {/* Sex Enrollment Totals - Sum of all ages by gender */}
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2">Sex Enrollment (Male)</td>
+              <td className="border p-2 text-center">
+                {calculateCategoryTotal('early_childhood', ownership, 'none', 'male', ageGroups.map(a => a.key))}
+              </td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+            </tr>
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2">Sex Enrollment (Female)</td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+              <td className="border p-2 text-center">
+                {calculateCategoryTotal('early_childhood', ownership, 'none', 'female', ageGroups.map(a => a.key))}
+              </td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+            </tr>
+            {/* Grand Total - Sum of male + female */}
+            <tr className="bg-green-100 font-bold">
+              <td className="border p-2">Total Enrollment</td>
+              <td className="border p-2 text-center bg-gray-100" colSpan={2}>-</td>
+              <td className="border p-2 text-center">
+                {calculateCategoryTotal('early_childhood', ownership, 'none', 'male', ageGroups.map(a => a.key)) +
+                 calculateCategoryTotal('early_childhood', ownership, 'none', 'female', ageGroups.map(a => a.key))}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -210,13 +236,13 @@ export default function StudentEnrollmentPage() {
 
   // Special Education Table (D2)
   const renderSpecialEducation = (ownership: string) => {
+    // CRITICAL: Age groups updated to match Excel template exactly (was incompatible before)
     const ageGroups = [
-      { key: '5_8', label: '5-8 years' },
-      { key: '9_11', label: '9-11 years' },
-      { key: '12_14', label: '12-14 years' },
-      { key: '15_17', label: '15-17 years' },
-      { key: '18_20', label: '18-20 years' },
-      { key: 'over_20', label: '> 20 years' },
+      { key: 'under_5', label: '≤5 years' },
+      { key: '6_10', label: '6-10 years' },
+      { key: '11_15', label: '11-15 years' },
+      { key: '16_20', label: '16-20 years' },
+      { key: 'over_20', label: '20+ years' },
       { key: 'unknown', label: 'Age Unknown' }
     ]
 
@@ -264,6 +290,32 @@ export default function StudentEnrollmentPage() {
                 </td>
               </tr>
             ))}
+            {/* Sex Enrollment Totals - Sum of all ages by gender */}
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2">Sex Enrollment (Male)</td>
+              <td className="border p-2 text-center">
+                {calculateCategoryTotal('special_education', ownership, 'none', 'male', ageGroups.map(a => a.key))}
+              </td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+            </tr>
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2">Sex Enrollment (Female)</td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+              <td className="border p-2 text-center">
+                {calculateCategoryTotal('special_education', ownership, 'none', 'female', ageGroups.map(a => a.key))}
+              </td>
+              <td className="border p-2 text-center bg-gray-100">-</td>
+            </tr>
+            {/* Grand Total - Sum of male + female */}
+            <tr className="bg-green-100 font-bold">
+              <td className="border p-2">Total Enrollment</td>
+              <td className="border p-2 text-center bg-gray-100" colSpan={2}>-</td>
+              <td className="border p-2 text-center">
+                {calculateCategoryTotal('special_education', ownership, 'none', 'male', ageGroups.map(a => a.key)) +
+                 calculateCategoryTotal('special_education', ownership, 'none', 'female', ageGroups.map(a => a.key))}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -350,6 +402,52 @@ export default function StudentEnrollmentPage() {
                 </tr>
               </>
             ))}
+            {/* Column Totals - Sum of all ages for each grade */}
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2" colSpan={2}>Total (Male)</td>
+              {grades.map(grade => (
+                <td key={grade} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) => sum + (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'male')) || 0), 0)}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {grades.reduce((sum, grade) =>
+                  sum + ageGroups.reduce((ageSum, age) => ageSum + (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'male')) || 0), 0), 0
+                )}
+              </td>
+            </tr>
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2" colSpan={2}>Total (Female)</td>
+              {grades.map(grade => (
+                <td key={grade} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) => sum + (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'female')) || 0), 0)}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {grades.reduce((sum, grade) =>
+                  sum + ageGroups.reduce((ageSum, age) => ageSum + (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'female')) || 0), 0), 0
+                )}
+              </td>
+            </tr>
+            <tr className="bg-green-100 font-bold">
+              <td className="border p-2" colSpan={2}>Total Enrollment</td>
+              {grades.map(grade => (
+                <td key={grade} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) =>
+                    sum + (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'male')) || 0) +
+                    (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'female')) || 0), 0
+                  )}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {grades.reduce((sum, grade) =>
+                  sum + ageGroups.reduce((ageSum, age) =>
+                    ageSum + (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'male')) || 0) +
+                    (enrollmentData.get(enrollKey('primary', ownership, age.key, grade, 'female')) || 0), 0
+                  ), 0
+                )}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -372,7 +470,7 @@ export default function StudentEnrollmentPage() {
       { key: 'unknown', label: 'Unknown' }
     ]
 
-    const forms = ['F1', 'F2', 'F3', 'F4', 'F5']
+    const forms = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6'] // Added F6 for countries with 6-year secondary programs
 
     return (
       <div className="overflow-x-auto">
@@ -433,6 +531,52 @@ export default function StudentEnrollmentPage() {
                 </tr>
               </>
             ))}
+            {/* Column Totals - Sum of all ages for each form */}
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2" colSpan={2}>Total (Male)</td>
+              {forms.map(form => (
+                <td key={form} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) => sum + (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'male')) || 0), 0)}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {forms.reduce((sum, form) =>
+                  sum + ageGroups.reduce((ageSum, age) => ageSum + (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'male')) || 0), 0), 0
+                )}
+              </td>
+            </tr>
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2" colSpan={2}>Total (Female)</td>
+              {forms.map(form => (
+                <td key={form} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) => sum + (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'female')) || 0), 0)}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {forms.reduce((sum, form) =>
+                  sum + ageGroups.reduce((ageSum, age) => ageSum + (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'female')) || 0), 0), 0
+                )}
+              </td>
+            </tr>
+            <tr className="bg-green-100 font-bold">
+              <td className="border p-2" colSpan={2}>Total Enrollment</td>
+              {forms.map(form => (
+                <td key={form} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) =>
+                    sum + (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'male')) || 0) +
+                    (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'female')) || 0), 0
+                  )}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {forms.reduce((sum, form) =>
+                  sum + ageGroups.reduce((ageSum, age) =>
+                    ageSum + (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'male')) || 0) +
+                    (enrollmentData.get(enrollKey('secondary', ownership, age.key, form, 'female')) || 0), 0
+                  ), 0
+                )}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -518,6 +662,52 @@ export default function StudentEnrollmentPage() {
                 </tr>
               </>
             ))}
+            {/* Column Totals - Sum of all ages for each programme */}
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2" colSpan={2}>Total (Male)</td>
+              {programmes.map(prog => (
+                <td key={prog} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) => sum + (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'male')) || 0), 0)}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {programmes.reduce((sum, prog) =>
+                  sum + ageGroups.reduce((ageSum, age) => ageSum + (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'male')) || 0), 0), 0
+                )}
+              </td>
+            </tr>
+            <tr className="bg-blue-50 font-semibold">
+              <td className="border p-2" colSpan={2}>Total (Female)</td>
+              {programmes.map(prog => (
+                <td key={prog} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) => sum + (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'female')) || 0), 0)}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {programmes.reduce((sum, prog) =>
+                  sum + ageGroups.reduce((ageSum, age) => ageSum + (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'female')) || 0), 0), 0
+                )}
+              </td>
+            </tr>
+            <tr className="bg-green-100 font-bold">
+              <td className="border p-2" colSpan={2}>Total Enrollment</td>
+              {programmes.map(prog => (
+                <td key={prog} className="border p-1 text-center text-xs">
+                  {ageGroups.reduce((sum, age) =>
+                    sum + (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'male')) || 0) +
+                    (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'female')) || 0), 0
+                  )}
+                </td>
+              ))}
+              <td className="border p-1 text-center bg-gray-200 font-bold text-xs">
+                {programmes.reduce((sum, prog) =>
+                  sum + ageGroups.reduce((ageSum, age) =>
+                    ageSum + (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'male')) || 0) +
+                    (enrollmentData.get(enrollKey('post_secondary', 'national', age.key, prog, 'female')) || 0), 0
+                  ), 0
+                )}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
