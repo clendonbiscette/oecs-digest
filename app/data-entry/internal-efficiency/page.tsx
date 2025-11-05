@@ -493,17 +493,17 @@ export default function InternalEfficiencyPage() {
 
         <Tabs defaultValue="repeaters" className="w-full">
           <TabsList className="grid grid-cols-4 w-full">
-            <TabsTrigger value="repeaters">E1: Repeaters</TabsTrigger>
-            <TabsTrigger value="dropouts">E2: Dropouts</TabsTrigger>
-            <TabsTrigger value="class-sizes">E3: Class Sizes</TabsTrigger>
-            <TabsTrigger value="school-mgmt">E4: School Management</TabsTrigger>
+            <TabsTrigger value="repeaters">Repeaters</TabsTrigger>
+            <TabsTrigger value="dropouts">Dropouts</TabsTrigger>
+            <TabsTrigger value="class-sizes">Class Sizes</TabsTrigger>
+            <TabsTrigger value="school-mgmt">School Management</TabsTrigger>
           </TabsList>
 
-          {/* E1: Repeaters */}
+          {/* Repeaters */}
           <TabsContent value="repeaters" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>E1 - Repeaters (Previous Academic Year)</CardTitle>
+                <CardTitle>Repeaters (Previous Academic Year)</CardTitle>
                 <CardDescription>Number of students repeating each grade/form by gender</CardDescription>
               </CardHeader>
               <CardContent>
@@ -515,11 +515,11 @@ export default function InternalEfficiencyPage() {
             </Card>
           </TabsContent>
 
-          {/* E2: Dropouts - Will implement next */}
+          {/* Dropouts */}
           <TabsContent value="dropouts" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>E2 - Dropouts (Previous Academic Year)</CardTitle>
+                <CardTitle>Dropouts (Previous Academic Year)</CardTitle>
                 <CardDescription>Number of students dropping out of each grade/form by gender</CardDescription>
               </CardHeader>
               <CardContent>
@@ -531,11 +531,11 @@ export default function InternalEfficiencyPage() {
             </Card>
           </TabsContent>
 
-          {/* E3: Class Sizes */}
+          {/* Class Sizes */}
           <TabsContent value="class-sizes" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>E3 - Class Sizes (Current Academic Year)</CardTitle>
+                <CardTitle>Class Sizes (Current Academic Year)</CardTitle>
                 <CardDescription>Student-teacher ratios and class size metrics</CardDescription>
               </CardHeader>
               <CardContent>
@@ -728,11 +728,11 @@ export default function InternalEfficiencyPage() {
             </Card>
           </TabsContent>
 
-          {/* E4: School Management */}
+          {/* School Management */}
           <TabsContent value="school-mgmt" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>E4 - School Boards, Development Plans & Disaster Management</CardTitle>
+                <CardTitle>School Management & Planning</CardTitle>
                 <CardDescription>School governance and planning indicators</CardDescription>
               </CardHeader>
               <CardContent>
