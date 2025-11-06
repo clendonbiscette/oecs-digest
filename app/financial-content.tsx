@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CustomLineChart } from "@/components/charts/line-chart"
 import { CustomBarChart } from "@/components/charts/bar-chart"
-import { TrendingUp, TrendingDown, Download, DollarSign, PieChart as PieChartIcon, Calendar } from "lucide-react"
+import { TrendingUp, TrendingDown, Download, DollarSign, PieChart as PieChartIcon, Calendar, BarChart3 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { FinancialTrendData } from "@/lib/supabase-data-service"
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts"
 import { SortableTable } from "@/components/ui/sortable-table"
+import { CountryComparison } from "@/components/country-comparison"
 
 interface FinancialContentProps {
   financialData: FinancialTrendData
@@ -22,6 +23,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'
 export function FinancialContent({ financialData }: FinancialContentProps) {
   const [selectedCountry, setSelectedCountry] = useState<string>("ALL")
   const [selectedMetric, setSelectedMetric] = useState<string>("education_budget")
+  const [showComparison, setShowComparison] = useState<boolean>(false)
 
   // Prepare data based on selected country
   const displayData = useMemo(() => {
@@ -190,16 +192,27 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
 
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-4">
-        <div className="flex items-center gap-2">
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
-          <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select country" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All OECS Countries</SelectItem>
-              {financialData.countries.map(country => (
-                <SelectItem key={country.country_code} value={country.country_code}>
+        <Button
+          variant={showComparison ? "default" : "outline"}
+          onClick={() => setShowComparison(!showComparison)}
+          className="gap-2"
+        >
+          <BarChart3 className="h-4 w-4" />
+          {showComparison ? "Hide Comparison" : "Compare Countries"}
+        </Button>
+
+        {!showComparison && (
+          <>
+            <div className="flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">All OECS Countries</SelectItem>
+                  {financialData.countries.map(country => (
+                    <SelectItem key={country.country_code} value={country.country_code}>
                   {country.country_name}
                 </SelectItem>
               ))}
@@ -225,9 +238,14 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
           <Download className="h-4 w-4 mr-2" />
           Export Data
         </Button>
+          </>
+        )}
       </div>
 
-      {/* Key Metrics */}
+      {/* Regular View */}
+      {!showComparison && (
+        <>
+          {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -456,6 +474,46 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
           />
         </CardContent>
       </Card>
+        </>
+      )}
+
+      {/* Country Comparison View */}
+      {showComparison && (
+        <CountryComparison
+          countries={financialData.countries}
+          data={financialData.byYear}
+          dataKey="country_code"
+          metrics={[
+            {
+              key: "national_budget_total",
+              label: "National Budget",
+              format: (v) => v ? `$${(v / 1000000).toFixed(2)}M` : "-"
+            },
+            {
+              key: "education_budget_total",
+              label: "Education Budget",
+              format: (v) => v ? `$${(v / 1000000).toFixed(2)}M` : "-"
+            },
+            {
+              key: "gdp",
+              label: "GDP",
+              format: (v) => v ? `$${(v / 1000000).toFixed(2)}M` : "-"
+            },
+            {
+              key: "education_pct_national_budget",
+              label: "% of National Budget",
+              format: (v) => v ? `${v.toFixed(2)}%` : "-"
+            },
+            {
+              key: "education_pct_gdp",
+              label: "% of GDP",
+              format: (v) => v ? `${v.toFixed(2)}%` : "-"
+            }
+          ]}
+          title="Financial Data Comparison"
+          description="Compare financial metrics across OECS countries"
+        />
+      )}
     </div>
   )
 }
