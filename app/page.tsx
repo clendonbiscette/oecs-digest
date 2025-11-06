@@ -49,7 +49,8 @@ export default function HomePage() {
       icon: <Database className="h-8 w-8" />,
       href: "/data-entry",
       color: "bg-[#4DA11D]",
-      stats: "Secure Access"
+      stats: "Secure Access",
+      active: true
     },
     {
       title: "Education Dashboard",
@@ -57,7 +58,8 @@ export default function HomePage() {
       icon: <BookOpen className="h-8 w-8" />,
       href: "/dashboard",
       color: "bg-blue-500",
-      stats: "9 Countries"
+      stats: "9 Countries",
+      active: true
     },
     {
       title: "Data Analytics",
@@ -65,7 +67,8 @@ export default function HomePage() {
       icon: <BarChart3 className="h-8 w-8" />,
       href: "/analytics",
       color: "bg-green-500",
-      stats: "Interactive Charts"
+      stats: "Coming Soon",
+      active: false
     },
     {
       title: "Regional Comparisons",
@@ -73,7 +76,8 @@ export default function HomePage() {
       icon: <Globe className="h-8 w-8" />,
       href: "/comparisons",
       color: "bg-purple-500",
-      stats: "Cross-Country"
+      stats: "Coming Soon",
+      active: false
     },
     {
       title: "Trends & Insights",
@@ -81,7 +85,8 @@ export default function HomePage() {
       icon: <TrendingUp className="h-8 w-8" />,
       href: "/trends",
       color: "bg-orange-500",
-      stats: "Time Series"
+      stats: "Coming Soon",
+      active: false
     },
     {
       title: "Geographic Analysis",
@@ -89,7 +94,8 @@ export default function HomePage() {
       icon: <MapPin className="h-8 w-8" />,
       href: "/geography",
       color: "bg-red-500",
-      stats: "Spatial Data"
+      stats: "Coming Soon",
+      active: false
     },
     {
       title: "Data Export",
@@ -97,7 +103,8 @@ export default function HomePage() {
       icon: <FileText className="h-8 w-8" />,
       href: "/export",
       color: "bg-indigo-500",
-      stats: "Multiple Formats"
+      stats: "Coming Soon",
+      active: false
     }
   ]
 
@@ -226,18 +233,39 @@ export default function HomePage() {
         {/* Navigation Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {navigationCards.map((card, index) => (
-            <Link href={card.href} key={index}>
-              <Card className="group hover:shadow-xl transition-all duration-300 bg-white/90 backdrop-blur-sm border-0 cursor-pointer transform hover:scale-105">
+            card.active ? (
+              <Link href={card.href} key={index}>
+                <Card className="group hover:shadow-xl transition-all duration-300 bg-white/90 backdrop-blur-sm border-0 cursor-pointer transform hover:scale-105">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div className={`p-3 rounded-lg ${card.color} text-white`}>
+                      {card.icon}
+                    </div>
+                    <Badge variant="outline" className="text-xs">
+                      {card.stats}
+                    </Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <CardTitle className="text-lg mb-2 group-hover:text-blue-600 transition-colors">
+                      {card.title}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      {card.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ) : (
+              <Card key={index} className="bg-white/60 backdrop-blur-sm border-0 opacity-60 cursor-not-allowed relative">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <div className={`p-3 rounded-lg ${card.color} text-white`}>
+                  <div className={`p-3 rounded-lg ${card.color} text-white opacity-50`}>
                     {card.icon}
                   </div>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800">
                     {card.stats}
                   </Badge>
                 </CardHeader>
                 <CardContent>
-                  <CardTitle className="text-lg mb-2 group-hover:text-blue-600 transition-colors">
+                  <CardTitle className="text-lg mb-2 text-gray-500">
                     {card.title}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">
@@ -245,7 +273,7 @@ export default function HomePage() {
                   </p>
                 </CardContent>
               </Card>
-            </Link>
+            )
           ))}
         </div>
 
