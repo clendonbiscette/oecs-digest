@@ -632,11 +632,15 @@ export async function getInstitutionsTrendData(): Promise<InstitutionsTrendData>
  */
 export async function getFinancialTrendData(): Promise<FinancialTrendData> {
   try {
+    console.log('[Financial Data] Starting fetch...')
+
     // Fetch all academic years
     const { data: academicYears, error: yearError } = await supabase
       .from('academic_years')
       .select('id, year_label, start_year')
       .order('start_year')
+
+    console.log('[Financial Data] Academic years:', academicYears?.length || 0, 'records')
 
     if (yearError) {
       console.error('Error fetching academic years:', yearError)
@@ -649,6 +653,8 @@ export async function getFinancialTrendData(): Promise<FinancialTrendData> {
       .select('id, country_code, country_name')
       .order('country_name')
 
+    console.log('[Financial Data] Countries:', countries?.length || 0, 'records')
+
     if (countryError) {
       console.error('Error fetching countries:', countryError)
       return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
@@ -659,12 +665,21 @@ export async function getFinancialTrendData(): Promise<FinancialTrendData> {
       .from('financial_data')
       .select('*')
 
+    console.log('[Financial Data] Financial records:', financial?.length || 0, 'records')
+    console.log('[Financial Data] Sample record:', financial?.[0])
+
     if (finError) {
       console.error('Error fetching financial data:', finError)
       return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
     }
 
     if (!financial || !academicYears || !countries) {
+      console.log('[Financial Data] Missing data - financial:', !!financial, 'academicYears:', !!academicYears, 'countries:', !!countries)
+      return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
+    }
+
+    if (financial.length === 0) {
+      console.log('[Financial Data] No financial records found in database')
       return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
     }
 
@@ -731,7 +746,7 @@ export async function getFinancialTrendData(): Promise<FinancialTrendData> {
         : 0
     }
 
-    return {
+    const result = {
       byYear: trendData.sort((a, b) => a.year_label.localeCompare(b.year_label)),
       byCountry,
       years: academicYears.map(y => y.year_label),
@@ -742,6 +757,13 @@ export async function getFinancialTrendData(): Promise<FinancialTrendData> {
       })),
       summary
     }
+
+    console.log('[Financial Data] Returning data - byYear:', result.byYear.length, 'records')
+    console.log('[Financial Data] Years available:', result.years)
+    console.log('[Financial Data] Countries available:', result.countries.length)
+    console.log('[Financial Data] Summary:', result.summary)
+
+    return result
   } catch (error) {
     console.error('Unexpected error in getFinancialTrendData:', error)
     return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
