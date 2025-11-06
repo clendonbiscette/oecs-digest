@@ -255,7 +255,7 @@ export default async function DashboardPage() {
           <TabsContent value="trends">
             {/* Trends Dashboard */}
             <Suspense fallback={<div>Loading trend data...</div>}>
-              <TrendsContent trendData={trendData} />
+              <TrendsContent trendData={trendData} financialData={financialData} />
             </Suspense>
           </TabsContent>
 

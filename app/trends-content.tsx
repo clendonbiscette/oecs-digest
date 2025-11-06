@@ -9,16 +9,20 @@ import { CustomLineChart } from "@/components/charts/line-chart"
 import { CustomBarChart } from "@/components/charts/bar-chart"
 import { TrendingUp, TrendingDown, Download, Filter, Calendar } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import type { InstitutionsTrendData } from "@/lib/supabase-data-service"
+import type { InstitutionsTrendData, FinancialTrendData } from "@/lib/supabase-data-service"
 import { SortableTable } from "@/components/ui/sortable-table"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Building2, DollarSign } from "lucide-react"
 
 interface TrendsContentProps {
   trendData: InstitutionsTrendData
+  financialData: FinancialTrendData
 }
 
-export function TrendsContent({ trendData }: TrendsContentProps) {
+export function TrendsContent({ trendData, financialData }: TrendsContentProps) {
   const [selectedCountry, setSelectedCountry] = useState<string>("ALL")
   const [selectedMetric, setSelectedMetric] = useState<string>("total_institutions")
+  const [trendType, setTrendType] = useState<"institutions" | "financial">("institutions")
 
   // Prepare data based on selected country
   const displayData = useMemo(() => {
@@ -172,6 +176,26 @@ export function TrendsContent({ trendData }: TrendsContentProps) {
           </AlertDescription>
         </div>
       </Alert>
+
+      {/* Trend Type Selector */}
+      <div className="flex gap-2">
+        <Button
+          variant={trendType === "institutions" ? "default" : "outline"}
+          onClick={() => setTrendType("institutions")}
+          className="gap-2"
+        >
+          <Building2 className="h-4 w-4" />
+          Institutions
+        </Button>
+        <Button
+          variant={trendType === "financial" ? "default" : "outline"}
+          onClick={() => setTrendType("financial")}
+          className="gap-2"
+        >
+          <DollarSign className="h-4 w-4" />
+          Financial
+        </Button>
+      </div>
 
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-4">
