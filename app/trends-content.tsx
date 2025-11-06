@@ -10,6 +10,7 @@ import { CustomBarChart } from "@/components/charts/bar-chart"
 import { TrendingUp, TrendingDown, Download, Filter, Calendar } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { InstitutionsTrendData } from "@/lib/supabase-data-service"
+import { SortableTable } from "@/components/ui/sortable-table"
 
 interface TrendsContentProps {
   trendData: InstitutionsTrendData
@@ -322,39 +323,63 @@ export function TrendsContent({ trendData }: TrendsContentProps) {
       <Card>
         <CardHeader>
           <CardTitle>Historical Data Table</CardTitle>
-          <CardDescription>Detailed year-by-year breakdown</CardDescription>
+          <CardDescription>Detailed year-by-year breakdown (click column headers to sort)</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2">Year</th>
-                  <th className="text-right p-2">Total</th>
-                  <th className="text-right p-2">Early Childhood</th>
-                  <th className="text-right p-2">Primary</th>
-                  <th className="text-right p-2">Secondary</th>
-                  <th className="text-right p-2">Special Ed</th>
-                  <th className="text-right p-2">TVET</th>
-                  <th className="text-right p-2">Post-Secondary</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayData.map((row, idx) => (
-                  <tr key={idx} className="border-b hover:bg-muted/50">
-                    <td className="p-2 font-medium">{row.year_label}</td>
-                    <td className="text-right p-2">{row.total_institutions}</td>
-                    <td className="text-right p-2">{row.early_childhood}</td>
-                    <td className="text-right p-2">{row.primary}</td>
-                    <td className="text-right p-2">{row.secondary}</td>
-                    <td className="text-right p-2">{row.special_ed}</td>
-                    <td className="text-right p-2">{row.tvet}</td>
-                    <td className="text-right p-2">{row.post_secondary}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <SortableTable
+            data={displayData}
+            columns={[
+              {
+                key: "year",
+                header: "Year",
+                accessor: (row) => row.year_label,
+                align: "left",
+                render: (value) => <span className="font-medium">{value}</span>
+              },
+              {
+                key: "total",
+                header: "Total",
+                accessor: (row) => row.total_institutions,
+                align: "right"
+              },
+              {
+                key: "early_childhood",
+                header: "Early Childhood",
+                accessor: (row) => row.early_childhood,
+                align: "right"
+              },
+              {
+                key: "primary",
+                header: "Primary",
+                accessor: (row) => row.primary,
+                align: "right"
+              },
+              {
+                key: "secondary",
+                header: "Secondary",
+                accessor: (row) => row.secondary,
+                align: "right"
+              },
+              {
+                key: "special_ed",
+                header: "Special Ed",
+                accessor: (row) => row.special_ed,
+                align: "right"
+              },
+              {
+                key: "tvet",
+                header: "TVET",
+                accessor: (row) => row.tvet,
+                align: "right"
+              },
+              {
+                key: "post_secondary",
+                header: "Post-Secondary",
+                accessor: (row) => row.post_secondary,
+                align: "right"
+              }
+            ]}
+          />
         </CardContent>
       </Card>
     </div>

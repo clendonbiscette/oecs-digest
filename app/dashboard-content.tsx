@@ -12,6 +12,7 @@ import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
 import { Download, Image, FileText, Calendar, Database as DatabaseIcon } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { SortableTable } from "@/components/ui/sortable-table"
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B', '#4ECDC4', '#45B7D1']
 
@@ -464,38 +465,63 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
           <Card>
             <CardHeader>
               <CardTitle>Education Summary by Country</CardTitle>
+              <CardDescription>Click column headers to sort</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left p-2">Country</th>
-                      <th className="text-right p-2">Daycare</th>
-                      <th className="text-right p-2">Preschool</th>
-                      <th className="text-right p-2">Primary</th>
-                      <th className="text-right p-2">Secondary</th>
-                      <th className="text-right p-2">Special Ed</th>
-                      <th className="text-right p-2">TVET</th>
-                      <th className="text-right p-2">Post-Secondary</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {educationData.summary.map((country: any) => (
-                      <tr key={country.country_code} className="border-b">
-                        <td className="p-2 font-medium">{country.country_name}</td>
-                        <td className="text-right p-2">{country.total_daycare_centres}</td>
-                        <td className="text-right p-2">{country.total_preschools}</td>
-                        <td className="text-right p-2">{country.total_primary_schools}</td>
-                        <td className="text-right p-2">{country.total_secondary_schools}</td>
-                        <td className="text-right p-2">{country.total_special_ed_schools}</td>
-                        <td className="text-right p-2">{country.total_tvet_institutions}</td>
-                        <td className="text-right p-2">{country.total_post_secondary}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <SortableTable
+                data={educationData.summary}
+                columns={[
+                  {
+                    key: "country",
+                    header: "Country",
+                    accessor: (row: any) => row.country_name,
+                    align: "left",
+                    render: (value) => <span className="font-medium">{value}</span>
+                  },
+                  {
+                    key: "daycare",
+                    header: "Daycare",
+                    accessor: (row: any) => row.total_daycare_centres,
+                    align: "right"
+                  },
+                  {
+                    key: "preschool",
+                    header: "Preschool",
+                    accessor: (row: any) => row.total_preschools,
+                    align: "right"
+                  },
+                  {
+                    key: "primary",
+                    header: "Primary",
+                    accessor: (row: any) => row.total_primary_schools,
+                    align: "right"
+                  },
+                  {
+                    key: "secondary",
+                    header: "Secondary",
+                    accessor: (row: any) => row.total_secondary_schools,
+                    align: "right"
+                  },
+                  {
+                    key: "special_ed",
+                    header: "Special Ed",
+                    accessor: (row: any) => row.total_special_ed_schools,
+                    align: "right"
+                  },
+                  {
+                    key: "tvet",
+                    header: "TVET",
+                    accessor: (row: any) => row.total_tvet_institutions,
+                    align: "right"
+                  },
+                  {
+                    key: "post_secondary",
+                    header: "Post-Secondary",
+                    accessor: (row: any) => row.total_post_secondary,
+                    align: "right"
+                  }
+                ]}
+              />
             </CardContent>
           </Card>
 

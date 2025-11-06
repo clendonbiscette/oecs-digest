@@ -11,6 +11,7 @@ import { TrendingUp, TrendingDown, Download, DollarSign, PieChart as PieChartIco
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { FinancialTrendData } from "@/lib/supabase-data-service"
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts"
+import { SortableTable } from "@/components/ui/sortable-table"
 
 interface FinancialContentProps {
   financialData: FinancialTrendData
@@ -403,45 +404,56 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
       <Card>
         <CardHeader>
           <CardTitle>Financial Data Table</CardTitle>
-          <CardDescription>Detailed year-by-year breakdown</CardDescription>
+          <CardDescription>Detailed year-by-year breakdown (click column headers to sort)</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2">Year</th>
-                  <th className="text-right p-2">National Budget (M)</th>
-                  <th className="text-right p-2">Education Budget (M)</th>
-                  <th className="text-right p-2">GDP (M)</th>
-                  <th className="text-right p-2">% of Budget</th>
-                  <th className="text-right p-2">% of GDP</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayData.map((row, idx) => (
-                  <tr key={idx} className="border-b hover:bg-muted/50">
-                    <td className="p-2 font-medium">{row.year_label}</td>
-                    <td className="text-right p-2">
-                      {row.national_budget_total ? `$${(row.national_budget_total / 1000000).toFixed(2)}` : '-'}
-                    </td>
-                    <td className="text-right p-2">
-                      {row.education_budget_total ? `$${(row.education_budget_total / 1000000).toFixed(2)}` : '-'}
-                    </td>
-                    <td className="text-right p-2">
-                      {row.gdp ? `$${(row.gdp / 1000000).toFixed(2)}` : '-'}
-                    </td>
-                    <td className="text-right p-2">
-                      {row.education_pct_national_budget ? `${row.education_pct_national_budget.toFixed(2)}%` : '-'}
-                    </td>
-                    <td className="text-right p-2">
-                      {row.education_pct_gdp ? `${row.education_pct_gdp.toFixed(2)}%` : '-'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <SortableTable
+            data={displayData}
+            columns={[
+              {
+                key: "year",
+                header: "Year",
+                accessor: (row) => row.year_label,
+                align: "left",
+                render: (value) => <span className="font-medium">{value}</span>
+              },
+              {
+                key: "national_budget",
+                header: "National Budget (M)",
+                accessor: (row) => row.national_budget_total || 0,
+                align: "right",
+                render: (value) => value ? `$${(value / 1000000).toFixed(2)}` : '-'
+              },
+              {
+                key: "education_budget",
+                header: "Education Budget (M)",
+                accessor: (row) => row.education_budget_total || 0,
+                align: "right",
+                render: (value) => value ? `$${(value / 1000000).toFixed(2)}` : '-'
+              },
+              {
+                key: "gdp",
+                header: "GDP (M)",
+                accessor: (row) => row.gdp || 0,
+                align: "right",
+                render: (value) => value ? `$${(value / 1000000).toFixed(2)}` : '-'
+              },
+              {
+                key: "pct_budget",
+                header: "% of Budget",
+                accessor: (row) => row.education_pct_national_budget || 0,
+                align: "right",
+                render: (value) => value ? `${value.toFixed(2)}%` : '-'
+              },
+              {
+                key: "pct_gdp",
+                header: "% of GDP",
+                accessor: (row) => row.education_pct_gdp || 0,
+                align: "right",
+                render: (value) => value ? `${value.toFixed(2)}%` : '-'
+              }
+            ]}
+          />
         </CardContent>
       </Card>
     </div>
