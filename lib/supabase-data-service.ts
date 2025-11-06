@@ -83,6 +83,43 @@ export interface InstitutionsTrendData {
   countries: Country[]
 }
 
+export interface FinancialData {
+  country_code: string
+  country_name: string
+  year_label: string
+  national_budget_total: number | null
+  national_budget_recurrent: number | null
+  national_budget_capital: number | null
+  gdp: number | null
+  education_budget_total: number | null
+  education_budget_recurrent: number | null
+  education_budget_capital: number | null
+  education_pct_national_budget: number | null
+  education_pct_gdp: number | null
+  allocation_early_childhood: number | null
+  allocation_primary: number | null
+  allocation_secondary: number | null
+  allocation_special_ed: number | null
+  allocation_post_secondary: number | null
+  allocation_tertiary: number | null
+  allocation_other: number | null
+}
+
+export interface FinancialTrendData {
+  byYear: FinancialData[]
+  byCountry: {
+    [countryCode: string]: FinancialData[]
+  }
+  years: string[]
+  countries: Country[]
+  summary: {
+    total_education_budget: number
+    total_gdp: number
+    avg_education_pct_budget: number
+    avg_education_pct_gdp: number
+  }
+}
+
 /**
  * Get education summary for all countries for the active academic year
  * Aggregates institution counts from the institutions table
@@ -586,6 +623,128 @@ export async function getInstitutionsTrendData(): Promise<InstitutionsTrendData>
   } catch (error) {
     console.error('Unexpected error in getInstitutionsTrendData:', error)
     return { byYear: [], byCountry: {}, years: [], countries: [] }
+  }
+}
+
+/**
+ * Get financial data trends across multiple years
+ * Returns budget, GDP, and education spending data for trend analysis
+ */
+export async function getFinancialTrendData(): Promise<FinancialTrendData> {
+  try {
+    // Fetch all academic years
+    const { data: academicYears, error: yearError } = await supabase
+      .from('academic_years')
+      .select('id, year_label, start_year')
+      .order('start_year')
+
+    if (yearError) {
+      console.error('Error fetching academic years:', yearError)
+      return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
+    }
+
+    // Fetch all countries
+    const { data: countries, error: countryError } = await supabase
+      .from('countries')
+      .select('id, country_code, country_name')
+      .order('country_name')
+
+    if (countryError) {
+      console.error('Error fetching countries:', countryError)
+      return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
+    }
+
+    // Fetch all financial data
+    const { data: financial, error: finError } = await supabase
+      .from('financial_data')
+      .select('*')
+
+    if (finError) {
+      console.error('Error fetching financial data:', finError)
+      return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
+    }
+
+    if (!financial || !academicYears || !countries) {
+      return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
+    }
+
+    // Create lookup maps
+    const yearMap = new Map(academicYears.map(y => [y.id, y.year_label]))
+    const countryMap = new Map(countries.map(c => [c.id, c]))
+
+    // Transform data
+    const trendData: FinancialData[] = financial.map((fin: any) => {
+      const year = yearMap.get(fin.academic_year_id) || 'Unknown'
+      const country = countryMap.get(fin.country_id)
+
+      return {
+        country_code: country?.country_code || 'UNKNOWN',
+        country_name: country?.country_name || 'Unknown',
+        year_label: year,
+        national_budget_total: fin.national_budget_total,
+        national_budget_recurrent: fin.national_budget_recurrent,
+        national_budget_capital: fin.national_budget_capital,
+        gdp: fin.gdp,
+        education_budget_total: fin.education_budget_total,
+        education_budget_recurrent: fin.education_budget_recurrent,
+        education_budget_capital: fin.education_budget_capital,
+        education_pct_national_budget: fin.education_pct_national_budget,
+        education_pct_gdp: fin.education_pct_gdp,
+        allocation_early_childhood: fin.allocation_early_childhood,
+        allocation_primary: fin.allocation_primary,
+        allocation_secondary: fin.allocation_secondary,
+        allocation_special_ed: fin.allocation_special_ed,
+        allocation_post_secondary: fin.allocation_post_secondary,
+        allocation_tertiary: fin.allocation_tertiary,
+        allocation_other: fin.allocation_other
+      }
+    })
+
+    // Group by country
+    const byCountry: { [countryCode: string]: FinancialData[] } = {}
+    trendData.forEach(point => {
+      if (!byCountry[point.country_code]) {
+        byCountry[point.country_code] = []
+      }
+      byCountry[point.country_code].push(point)
+    })
+
+    // Sort each country's data by year
+    Object.keys(byCountry).forEach(countryCode => {
+      byCountry[countryCode].sort((a, b) => a.year_label.localeCompare(b.year_label))
+    })
+
+    // Calculate summary statistics
+    const validBudgets = trendData.filter(d => d.education_budget_total !== null)
+    const validGDP = trendData.filter(d => d.gdp !== null)
+    const validPctBudget = trendData.filter(d => d.education_pct_national_budget !== null)
+    const validPctGDP = trendData.filter(d => d.education_pct_gdp !== null)
+
+    const summary = {
+      total_education_budget: validBudgets.reduce((sum, d) => sum + (d.education_budget_total || 0), 0),
+      total_gdp: validGDP.reduce((sum, d) => sum + (d.gdp || 0), 0),
+      avg_education_pct_budget: validPctBudget.length > 0
+        ? validPctBudget.reduce((sum, d) => sum + (d.education_pct_national_budget || 0), 0) / validPctBudget.length
+        : 0,
+      avg_education_pct_gdp: validPctGDP.length > 0
+        ? validPctGDP.reduce((sum, d) => sum + (d.education_pct_gdp || 0), 0) / validPctGDP.length
+        : 0
+    }
+
+    return {
+      byYear: trendData.sort((a, b) => a.year_label.localeCompare(b.year_label)),
+      byCountry,
+      years: academicYears.map(y => y.year_label),
+      countries: countries.map(c => ({
+        country_code: c.country_code,
+        country_name: c.country_name,
+        region: 'OECS'
+      })),
+      summary
+    }
+  } catch (error) {
+    console.error('Unexpected error in getFinancialTrendData:', error)
+    return { byYear: [], byCountry: {}, years: [], countries: [], summary: { total_education_budget: 0, total_gdp: 0, avg_education_pct_budget: 0, avg_education_pct_gdp: 0 } }
   }
 }
 
