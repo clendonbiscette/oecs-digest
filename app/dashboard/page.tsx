@@ -1,10 +1,11 @@
 import { Suspense } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, GraduationCap, Users, Building2, ArrowLeft, BarChart3, TrendingUp } from "lucide-react"
-import { getAllEducationData, getAllEnrollmentData, initializeDatabase } from "@/lib/supabase-data-service"
+import { BookOpen, GraduationCap, Users, Building2, ArrowLeft, BarChart3, TrendingUp, LineChart } from "lucide-react"
+import { getAllEducationData, getAllEnrollmentData, getInstitutionsTrendData, initializeDatabase } from "@/lib/supabase-data-service"
 import { DashboardContent } from "../dashboard-content"
 import { EnrollmentContent } from "../enrollment-content"
+import { TrendsContent } from "../trends-content"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -12,9 +13,10 @@ export default async function DashboardPage() {
   // Initialize database first
   await initializeDatabase()
 
-  const [educationData, enrollmentData] = await Promise.all([
+  const [educationData, enrollmentData, trendData] = await Promise.all([
     getAllEducationData(),
-    getAllEnrollmentData()
+    getAllEnrollmentData(),
+    getInstitutionsTrendData()
   ])
 
   // Calculate key metrics for institutions
@@ -62,9 +64,9 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Tabs for switching between Institutions and Enrollment */}
+        {/* Tabs for switching between Institutions, Enrollment, and Trends */}
         <Tabs defaultValue="institutions" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="institutions" className="flex items-center gap-2">
               <Building2 className="h-4 w-4" />
               Institutions
@@ -72,6 +74,10 @@ export default async function DashboardPage() {
             <TabsTrigger value="enrollment" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               Enrollment
+            </TabsTrigger>
+            <TabsTrigger value="trends" className="flex items-center gap-2">
+              <LineChart className="h-4 w-4" />
+              Trends
             </TabsTrigger>
           </TabsList>
 
@@ -237,6 +243,13 @@ export default async function DashboardPage() {
             {/* Enrollment Main Dashboard */}
             <Suspense fallback={<div>Loading enrollment data...</div>}>
               <EnrollmentContent enrollmentData={enrollmentData} />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="trends">
+            {/* Trends Dashboard */}
+            <Suspense fallback={<div>Loading trend data...</div>}>
+              <TrendsContent trendData={trendData} />
             </Suspense>
           </TabsContent>
         </Tabs>

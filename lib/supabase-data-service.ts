@@ -61,6 +61,28 @@ export interface PostSecondaryData {
   total: number
 }
 
+export interface InstitutionTrendDataPoint {
+  year_label: string
+  country_code: string
+  country_name: string
+  total_institutions: number
+  early_childhood: number
+  primary: number
+  secondary: number
+  special_ed: number
+  tvet: number
+  post_secondary: number
+}
+
+export interface InstitutionsTrendData {
+  byYear: InstitutionTrendDataPoint[]
+  byCountry: {
+    [countryCode: string]: InstitutionTrendDataPoint[]
+  }
+  years: string[]
+  countries: Country[]
+}
+
 /**
  * Get education summary for all countries for the active academic year
  * Aggregates institution counts from the institutions table
@@ -461,6 +483,109 @@ export async function getAllEnrollmentData(): Promise<EnrollmentData> {
     primaryAgeDistribution,
     secondaryAgeDistribution,
     trends
+  }
+}
+
+/**
+ * Get institutions trend data across multiple years
+ * Returns data grouped by year and by country for trend visualization
+ */
+export async function getInstitutionsTrendData(): Promise<InstitutionsTrendData> {
+  try {
+    // Fetch all academic years
+    const { data: academicYears, error: yearError } = await supabase
+      .from('academic_years')
+      .select('id, year_label, start_year')
+      .order('start_year')
+
+    if (yearError) {
+      console.error('Error fetching academic years:', yearError)
+      return { byYear: [], byCountry: {}, years: [], countries: [] }
+    }
+
+    // Fetch all countries
+    const { data: countries, error: countryError } = await supabase
+      .from('countries')
+      .select('id, country_code, country_name')
+      .order('country_name')
+
+    if (countryError) {
+      console.error('Error fetching countries:', countryError)
+      return { byYear: [], byCountry: {}, years: [], countries: [] }
+    }
+
+    // Fetch all institutions data across all years
+    const { data: institutions, error: instError } = await supabase
+      .from('institutions')
+      .select('*')
+
+    if (instError) {
+      console.error('Error fetching institutions:', instError)
+      return { byYear: [], byCountry: {}, years: [], countries: [] }
+    }
+
+    if (!institutions || !academicYears || !countries) {
+      return { byYear: [], byCountry: {}, years: [], countries: [] }
+    }
+
+    // Create lookup maps
+    const yearMap = new Map(academicYears.map(y => [y.id, y.year_label]))
+    const countryMap = new Map(countries.map(c => [c.id, c]))
+
+    // Transform data to trend format
+    const trendData: InstitutionTrendDataPoint[] = institutions.map((inst: any) => {
+      const year = yearMap.get(inst.academic_year_id) || 'Unknown'
+      const country = countryMap.get(inst.country_id)
+
+      const early_childhood = inst.daycare_public + inst.daycare_private_church + inst.daycare_private_non_affiliated +
+                              inst.preschool_public + inst.preschool_private_church + inst.preschool_private_non_affiliated
+      const primary = inst.primary_public + inst.primary_private_church + inst.primary_private_non_affiliated
+      const secondary = inst.secondary_public + inst.secondary_private_church + inst.secondary_private_non_affiliated
+      const special_ed = inst.special_ed_public + inst.special_ed_private_church + inst.special_ed_private_non_affiliated
+      const tvet = inst.tvet_public + inst.tvet_private_church + inst.tvet_private_non_affiliated
+      const post_secondary = inst.post_secondary_public + inst.post_secondary_private
+
+      return {
+        year_label: year,
+        country_code: country?.country_code || 'UNKNOWN',
+        country_name: country?.country_name || 'Unknown',
+        early_childhood,
+        primary,
+        secondary,
+        special_ed,
+        tvet,
+        post_secondary,
+        total_institutions: early_childhood + primary + secondary + special_ed + tvet + post_secondary
+      }
+    })
+
+    // Group by country
+    const byCountry: { [countryCode: string]: InstitutionTrendDataPoint[] } = {}
+    trendData.forEach(point => {
+      if (!byCountry[point.country_code]) {
+        byCountry[point.country_code] = []
+      }
+      byCountry[point.country_code].push(point)
+    })
+
+    // Sort each country's data by year
+    Object.keys(byCountry).forEach(countryCode => {
+      byCountry[countryCode].sort((a, b) => a.year_label.localeCompare(b.year_label))
+    })
+
+    return {
+      byYear: trendData.sort((a, b) => a.year_label.localeCompare(b.year_label)),
+      byCountry,
+      years: academicYears.map(y => y.year_label),
+      countries: countries.map(c => ({
+        country_code: c.country_code,
+        country_name: c.country_name,
+        region: 'OECS'
+      }))
+    }
+  } catch (error) {
+    console.error('Unexpected error in getInstitutionsTrendData:', error)
+    return { byYear: [], byCountry: {}, years: [], countries: [] }
   }
 }
 
