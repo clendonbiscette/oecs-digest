@@ -66,9 +66,9 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Tabs for switching between Institutions, Enrollment, Trends, and Financial */}
+        {/* Tabs for switching between Institutions, Enrollment, and Financial */}
         <Tabs defaultValue="institutions" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="institutions" className="flex items-center gap-2">
               <Building2 className="h-4 w-4" />
               Institutions
@@ -77,10 +77,6 @@ export default async function DashboardPage() {
               <Users className="h-4 w-4" />
               Enrollment
             </TabsTrigger>
-            <TabsTrigger value="trends" className="flex items-center gap-2">
-              <LineChart className="h-4 w-4" />
-              Trends
-            </TabsTrigger>
             <TabsTrigger value="financial" className="flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
               Financial
@@ -88,90 +84,108 @@ export default async function DashboardPage() {
           </TabsList>
 
           <TabsContent value="institutions">
-            {/* Institutions Key Statistics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Early Childhood</CardTitle>
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {educationData.summary.reduce(
-                      (sum, country) => sum + country.total_daycare_centres + country.total_preschools,
-                      0,
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Daycare & Preschool Centers</p>
-                </CardContent>
-              </Card>
+            {/* Sub-tabs for Overview vs Historical Trends */}
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="mb-6">
+                <TabsTrigger value="overview">Current Overview</TabsTrigger>
+                <TabsTrigger value="historical">Historical Trends</TabsTrigger>
+              </TabsList>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">K-12 Education</CardTitle>
-                  <BookOpen className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {educationData.summary.reduce(
-                      (sum, country) => sum + country.total_primary_schools + country.total_secondary_schools,
-                      0,
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Primary & Secondary Schools</p>
-                </CardContent>
-              </Card>
+              {/* Overview Tab */}
+              <TabsContent value="overview">
+                {/* Institutions Key Statistics Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Early Childhood</CardTitle>
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {educationData.summary.reduce(
+                          (sum, country) => sum + country.total_daycare_centres + country.total_preschools,
+                          0,
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Daycare & Preschool Centers</p>
+                    </CardContent>
+                  </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Higher Education</CardTitle>
-                  <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {educationData.summary.reduce((sum, country) => sum + country.total_post_secondary, 0)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Post-Secondary Institutions</p>
-                </CardContent>
-              </Card>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">K-12 Education</CardTitle>
+                      <BookOpen className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {educationData.summary.reduce(
+                          (sum, country) => sum + country.total_primary_schools + country.total_secondary_schools,
+                          0,
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Primary & Secondary Schools</p>
+                    </CardContent>
+                  </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Specialized</CardTitle>
-                  <Building2 className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {educationData.summary.reduce(
-                      (sum, country) => sum + country.total_special_ed_schools + country.total_tvet_institutions,
-                      0,
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Special Ed & TVET</p>
-                </CardContent>
-              </Card>
-            </div>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Higher Education</CardTitle>
+                      <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {educationData.summary.reduce((sum, country) => sum + country.total_post_secondary, 0)}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Post-Secondary Institutions</p>
+                    </CardContent>
+                  </Card>
 
-            {/* Institutions Summary Badges */}
-            <div className="flex justify-center gap-4 flex-wrap mb-8">
-              <Badge variant="secondary" className="text-sm">
-                <Users className="h-4 w-4 mr-1" />
-                {countriesWithData} Active Countries
-              </Badge>
-              <Badge variant="secondary" className="text-sm">
-                <Building2 className="h-4 w-4 mr-1" />
-                {totalInstitutions} Total Institutions
-              </Badge>
-              <Badge variant="secondary" className="text-sm">
-                <BookOpen className="h-4 w-4 mr-1" />
-                2022-23 Academic Year
-              </Badge>
-            </div>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Specialized</CardTitle>
+                      <Building2 className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {educationData.summary.reduce(
+                          (sum, country) => sum + country.total_special_ed_schools + country.total_tvet_institutions,
+                          0,
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Special Ed & TVET</p>
+                    </CardContent>
+                  </Card>
+                </div>
 
-            {/* Institutions Main Dashboard */}
-            <Suspense fallback={<div>Loading dashboard...</div>}>
-              <DashboardContent educationData={educationData} />
-            </Suspense>
+                {/* Institutions Summary Badges */}
+                <div className="flex justify-center gap-4 flex-wrap mb-8">
+                  <Badge variant="secondary" className="text-sm">
+                    <Users className="h-4 w-4 mr-1" />
+                    {countriesWithData} Active Countries
+                  </Badge>
+                  <Badge variant="secondary" className="text-sm">
+                    <Building2 className="h-4 w-4 mr-1" />
+                    {totalInstitutions} Total Institutions
+                  </Badge>
+                  <Badge variant="secondary" className="text-sm">
+                    <BookOpen className="h-4 w-4 mr-1" />
+                    2022-23 Academic Year
+                  </Badge>
+                </div>
+
+                {/* Institutions Main Dashboard */}
+                <Suspense fallback={<div>Loading dashboard...</div>}>
+                  <DashboardContent educationData={educationData} />
+                </Suspense>
+              </TabsContent>
+
+              {/* Historical Trends Tab */}
+              <TabsContent value="historical">
+                <Suspense fallback={<div>Loading trend data...</div>}>
+                  <TrendsContent trendData={trendData} financialData={financialData} />
+                </Suspense>
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
           <TabsContent value="enrollment">
