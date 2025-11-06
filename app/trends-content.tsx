@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CustomLineChart } from "@/components/charts/line-chart"
 import { CustomBarChart } from "@/components/charts/bar-chart"
-import { TrendingUp, TrendingDown, Download, Filter } from "lucide-react"
+import { TrendingUp, TrendingDown, Download, Filter, Calendar } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { InstitutionsTrendData } from "@/lib/supabase-data-service"
 
 interface TrendsContentProps {
@@ -148,6 +149,29 @@ export function TrendsContent({ trendData }: TrendsContentProps) {
 
   return (
     <div className="space-y-6">
+      {/* Data Timestamp Alert */}
+      <Alert className="bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800">
+        <div className="flex items-start gap-4">
+          <Calendar className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5" />
+          <AlertDescription className="text-sm">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <div>
+                <span className="font-semibold text-purple-900 dark:text-purple-100">Academic Years:</span>{" "}
+                <span className="text-purple-700 dark:text-purple-300">{trendData.years[0]} - {trendData.years[trendData.years.length - 1]}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-purple-900 dark:text-purple-100">Data Source:</span>{" "}
+                <span className="text-purple-700 dark:text-purple-300">OECS Historical Institutions Data</span>
+              </div>
+              <div>
+                <span className="font-semibold text-purple-900 dark:text-purple-100">Years Available:</span>{" "}
+                <span className="text-purple-700 dark:text-purple-300">{trendData.years.length} years</span>
+              </div>
+            </div>
+          </AlertDescription>
+        </div>
+      </Alert>
+
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">

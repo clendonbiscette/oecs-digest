@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CustomLineChart } from "@/components/charts/line-chart"
 import { CustomBarChart } from "@/components/charts/bar-chart"
-import { TrendingUp, TrendingDown, Download, DollarSign, PieChart as PieChartIcon } from "lucide-react"
+import { TrendingUp, TrendingDown, Download, DollarSign, PieChart as PieChartIcon, Calendar } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { FinancialTrendData } from "@/lib/supabase-data-service"
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts"
 
@@ -163,6 +164,29 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
 
   return (
     <div className="space-y-6">
+      {/* Data Timestamp Alert */}
+      <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
+        <div className="flex items-start gap-4">
+          <Calendar className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+          <AlertDescription className="text-sm">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <div>
+                <span className="font-semibold text-amber-900 dark:text-amber-100">Academic Years:</span>{" "}
+                <span className="text-amber-700 dark:text-amber-300">{financialData.years[0]} - {financialData.years[financialData.years.length - 1]}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-amber-900 dark:text-amber-100">Data Source:</span>{" "}
+                <span className="text-amber-700 dark:text-amber-300">OECS National Budgets & Financial Records</span>
+              </div>
+              <div>
+                <span className="font-semibold text-amber-900 dark:text-amber-100">Years Available:</span>{" "}
+                <span className="text-amber-700 dark:text-amber-300">{financialData.years.length} years</span>
+              </div>
+            </div>
+          </AlertDescription>
+        </div>
+      </Alert>
+
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">

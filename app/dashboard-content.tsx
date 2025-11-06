@@ -10,7 +10,8 @@ import { StackedBarChart } from "@/components/charts/stacked-bar-chart"
 import { ResponsiveContainer, LineChart, AreaChart, Line, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
-import { Download, Image, FileText } from "lucide-react"
+import { Download, Image, FileText, Calendar, Database as DatabaseIcon } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B', '#4ECDC4', '#45B7D1']
 
@@ -230,13 +231,37 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
   }
 
   return (
-    <Tabs defaultValue="overview" className="space-y-6">
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="visualizations">Visualizations</TabsTrigger>
-        <TabsTrigger value="analysis">AI Analysis</TabsTrigger>
-        <TabsTrigger value="data">Raw Data</TabsTrigger>
-      </TabsList>
+    <div className="space-y-6">
+      {/* Data Timestamp Alert */}
+      <Alert className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+        <div className="flex items-start gap-4">
+          <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+          <AlertDescription className="text-sm">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <div>
+                <span className="font-semibold text-blue-900 dark:text-blue-100">Academic Year:</span>{" "}
+                <span className="text-blue-700 dark:text-blue-300">2023-2024</span>
+              </div>
+              <div>
+                <span className="font-semibold text-blue-900 dark:text-blue-100">Data Source:</span>{" "}
+                <span className="text-blue-700 dark:text-blue-300">OECS Education Statistics Digest</span>
+              </div>
+              <div>
+                <span className="font-semibold text-blue-900 dark:text-blue-100">Last Updated:</span>{" "}
+                <span className="text-blue-700 dark:text-blue-300">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
+              </div>
+            </div>
+          </AlertDescription>
+        </div>
+      </Alert>
+
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="visualizations">Visualizations</TabsTrigger>
+          <TabsTrigger value="analysis">AI Analysis</TabsTrigger>
+          <TabsTrigger value="data">Raw Data</TabsTrigger>
+        </TabsList>
 
       <TabsContent value="overview" className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -652,5 +677,6 @@ export function DashboardContent({ educationData }: DashboardContentProps) {
         </div>
       </TabsContent>
     </Tabs>
+    </div>
   )
 }

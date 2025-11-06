@@ -6,10 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from "recharts"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Users, BookOpen, GraduationCap, Building2, TrendingUp, BarChart3, Target, Activity, Eye, Brain, Database, BarChart4, Download, Image, FileText } from "lucide-react"
+import { Users, BookOpen, GraduationCap, Building2, TrendingUp, BarChart3, Target, Activity, Eye, Brain, Database, BarChart4, Download, Image, FileText, Calendar } from "lucide-react"
 import { type EnrollmentData } from "@/lib/supabase-data-service"
 import { AIChat } from "@/components/ai-chat"
 import { VisualizationControls } from "@/components/visualization-controls"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useState } from "react"
 
 interface EnrollmentContentProps {
@@ -499,6 +500,29 @@ export function EnrollmentContent({ enrollmentData }: EnrollmentContentProps) {
 
   return (
     <div className="space-y-8">
+      {/* Data Timestamp Alert */}
+      <Alert className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+        <div className="flex items-start gap-4">
+          <Calendar className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
+          <AlertDescription className="text-sm">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <div>
+                <span className="font-semibold text-green-900 dark:text-green-100">Academic Year:</span>{" "}
+                <span className="text-green-700 dark:text-green-300">2023-2024</span>
+              </div>
+              <div>
+                <span className="font-semibold text-green-900 dark:text-green-100">Data Source:</span>{" "}
+                <span className="text-green-700 dark:text-green-300">OECS Student Enrollment Records</span>
+              </div>
+              <div>
+                <span className="font-semibold text-green-900 dark:text-green-100">Last Updated:</span>{" "}
+                <span className="text-green-700 dark:text-green-300">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
+              </div>
+            </div>
+          </AlertDescription>
+        </div>
+      </Alert>
+
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview" className="flex items-center gap-2">
