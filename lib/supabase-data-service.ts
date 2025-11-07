@@ -222,7 +222,7 @@ export async function getEducationSummary(yearLabel?: string): Promise<Education
     }
 
     // Get all countries to map IDs to codes/names
-    const { data: allCountries } = await supabase.from('countries').select('*').execute()
+    const { data: allCountries } = await supabase.from('countries').select('*')
     const countryMap = new Map(allCountries?.map(c => [c.id, c]) || [])
 
     // Transform to EducationSummary format
