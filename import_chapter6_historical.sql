@@ -450,3 +450,275 @@ DO UPDATE SET
     allocation_post_secondary = EXCLUDED.allocation_post_secondary,
     allocation_tertiary = EXCLUDED.allocation_tertiary,
     allocation_other = EXCLUDED.allocation_other;
+
+-- ATG - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'ATG'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- DMA - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'DMA'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- GRD - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'GRD'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    1033773121.0, 606524716.0, 427248405.0, 1609290000.0, 82107863.0, 74410922.0, 7696941.0, 7.94, 5.55, 728982.0, 29695487.0, 25940033.0, 5435957.0, 16883690.0, NULL, 3423714.0
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- MSR - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'MSR'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    927062755.0, 621455460.0, 305607295.0, 2817000000.0, 169162412.0, 162603412.0, 6559000.0, 18.0, 6.0, 6766186.0, 34085308.0, 24925753.0, 3025940.0, 15088148.0, NULL, 85271077.0
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- KNA - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'KNA'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- LCA - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'LCA'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    830907043.0, 638211620.0, 192695423.0, 0.0, 104270000.0, 103980000.0, 290000.0, 13.0, NULL, 7352000.0, 17651000.0, 45946000.0, 0.0, 14636000.0, NULL, 18683441.0
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- VCT - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'VCT'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    1697312800.0, 1361926800.0, 335386000.0, 0.0, 224583500.0, 200682469.0, 23901031.0, 13.0, NULL, 2692099.0, 67345149.0, 82873951.0, 4562342.0, 17525164.0, NULL, 49584795.0
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;
+
+-- VGB - 2020-2021
+INSERT INTO financial_data (
+    country_id,
+    academic_year_id,
+    national_budget_total, national_budget_recurrent, national_budget_capital,
+    gdp, education_budget_total, education_budget_recurrent, education_budget_capital,
+    education_pct_national_budget, education_pct_gdp,
+    allocation_early_childhood, allocation_primary, allocation_secondary,
+    allocation_special_ed, allocation_post_secondary, allocation_tertiary, allocation_other
+)
+VALUES (
+    (SELECT id FROM countries WHERE country_code = 'VGB'),
+    (SELECT id FROM academic_years WHERE year_label = '2020-2021'),
+    1186351151.0, 875583941.0, 310767210.0, 0.0, 154829794.0, 137221684.0, 17608110.0, 13.0, NULL, 0.0, 52621136.0, 48638716.0, 2098717.0, 20158000.0, NULL, 20743126.0
+)
+ON CONFLICT (country_id, academic_year_id)
+DO UPDATE SET
+    national_budget_total = EXCLUDED.national_budget_total,
+    national_budget_recurrent = EXCLUDED.national_budget_recurrent,
+    national_budget_capital = EXCLUDED.national_budget_capital,
+    gdp = EXCLUDED.gdp,
+    education_budget_total = EXCLUDED.education_budget_total,
+    education_budget_recurrent = EXCLUDED.education_budget_recurrent,
+    education_budget_capital = EXCLUDED.education_budget_capital,
+    education_pct_national_budget = EXCLUDED.education_pct_national_budget,
+    education_pct_gdp = EXCLUDED.education_pct_gdp,
+    allocation_early_childhood = EXCLUDED.allocation_early_childhood,
+    allocation_primary = EXCLUDED.allocation_primary,
+    allocation_secondary = EXCLUDED.allocation_secondary,
+    allocation_special_ed = EXCLUDED.allocation_special_ed,
+    allocation_post_secondary = EXCLUDED.allocation_post_secondary,
+    allocation_tertiary = EXCLUDED.allocation_tertiary,
+    allocation_other = EXCLUDED.allocation_other;

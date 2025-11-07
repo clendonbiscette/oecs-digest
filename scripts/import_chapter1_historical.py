@@ -73,16 +73,110 @@ class Chapter1Importer:
         """Import 2020-21 data (different sheet structure)"""
         wb = openpyxl.load_workbook(file_path, data_only=True)
 
-        # 2020-21 uses different sheet names
-        # Sheet "ECD" has daycare and preschool data
-        if 'ECD' in wb.sheetnames:
-            ws_ecd = wb['ECD']
-            # Need to analyze the structure - may need adjustment
-            print(f"    Found ECD sheet, analyzing structure...")
+        # 2020-21 has different sheet names and structure
+        # ECD: Early Childhood (rows 4-12)
+        # Prim&Sec: Primary & Secondary (rows 4-12)
+        # Post Sec: Post Secondary (rows 4-12)
+        # Spec Ed: Special Education (rows 5-13)
 
-        # For now, mark as TODO since structure is different
-        print(f"    [!] 2020-21 has different structure - needs manual mapping")
-        print(f"    Sheet names: {wb.sheetnames}")
+        # Country mapping for 2020-21
+        country_rows = {
+            4: 'ANG',
+            5: 'ATG',  # A&B
+            6: 'DMA',  # DOM
+            7: 'GRD',  # GREN
+            8: 'MSR',  # MON
+            9: 'KNA',  # SKN
+            10: 'LCA', # SLU
+            11: 'VCT', # SVG
+            12: 'VGB'  # BVI
+        }
+
+        # Special Education uses different row numbers (5-13 instead of 4-12)
+        spec_ed_rows = {
+            5: 'ANG',  # ANU
+            6: 'ATG',
+            7: 'DMA',
+            8: 'GRD',
+            9: 'MSR',
+            10: 'KNA',
+            11: 'LCA',
+            12: 'VCT',
+            13: 'VGB'
+        }
+
+        ws_ecd = wb['ECD']
+        ws_prim_sec = wb['Prim&Sec']
+        ws_post_sec = wb['Post Sec']
+        ws_spec_ed = wb['Spec Ed']
+
+        for row_num, country_code in country_rows.items():
+            # ECD Sheet - Daycare (cols B-D), Preschool (cols F-H)
+            daycare_public = ws_ecd.cell(row_num, 2).value or 0  # Col B
+            daycare_private_church = ws_ecd.cell(row_num, 3).value or 0  # Col C
+            daycare_private_non_affiliated = ws_ecd.cell(row_num, 4).value or 0  # Col D
+            preschool_public = ws_ecd.cell(row_num, 6).value or 0  # Col F
+            preschool_private_church = ws_ecd.cell(row_num, 7).value or 0  # Col G
+            preschool_private_non_affiliated = ws_ecd.cell(row_num, 8).value or 0  # Col H
+
+            # Prim&Sec Sheet - Primary (cols B-D), Secondary (cols F-H)
+            primary_public = ws_prim_sec.cell(row_num, 2).value or 0
+            primary_private_church = ws_prim_sec.cell(row_num, 3).value or 0
+            primary_private_non_affiliated = ws_prim_sec.cell(row_num, 4).value or 0
+            secondary_public = ws_prim_sec.cell(row_num, 6).value or 0
+            secondary_private_church = ws_prim_sec.cell(row_num, 7).value or 0
+            secondary_private_non_affiliated = ws_prim_sec.cell(row_num, 8).value or 0
+
+            # Post Sec Sheet - cols B-C
+            post_secondary_public = ws_post_sec.cell(row_num, 2).value or 0
+            post_secondary_private = ws_post_sec.cell(row_num, 3).value or 0
+
+            # Special Education - different row mapping
+            spec_ed_row = row_num + 1  # Spec Ed starts at row 5
+            special_ed_public = ws_spec_ed.cell(spec_ed_row, 2).value or 0
+            special_ed_private_church = ws_spec_ed.cell(spec_ed_row, 3).value or 0
+            special_ed_private_non_affiliated = ws_spec_ed.cell(spec_ed_row, 4).value or 0
+
+            # TVET - not in 2020-21, set to 0
+            tvet_public = 0
+            tvet_private_church = 0
+            tvet_private_non_affiliated = 0
+
+            record = {
+                'country_code': country_code,
+                'academic_year': year_label,
+                'daycare_public': daycare_public,
+                'daycare_private_church': daycare_private_church,
+                'daycare_private_non_affiliated': daycare_private_non_affiliated,
+                'preschool_public': preschool_public,
+                'preschool_private_church': preschool_private_church,
+                'preschool_private_non_affiliated': preschool_private_non_affiliated,
+                'primary_public': primary_public,
+                'primary_private_church': primary_private_church,
+                'primary_private_non_affiliated': primary_private_non_affiliated,
+                'secondary_public': secondary_public,
+                'secondary_private_church': secondary_private_church,
+                'secondary_private_non_affiliated': secondary_private_non_affiliated,
+                'special_ed_public': special_ed_public,
+                'special_ed_private_church': special_ed_private_church,
+                'special_ed_private_non_affiliated': special_ed_private_non_affiliated,
+                'tvet_public': tvet_public,
+                'tvet_private_church': tvet_private_church,
+                'tvet_private_non_affiliated': tvet_private_non_affiliated,
+                'post_secondary_public': post_secondary_public,
+                'post_secondary_private': post_secondary_private
+            }
+
+            self.data.append(record)
+
+            total = (daycare_public + daycare_private_church + daycare_private_non_affiliated +
+                    preschool_public + preschool_private_church + preschool_private_non_affiliated +
+                    primary_public + primary_private_church + primary_private_non_affiliated +
+                    secondary_public + secondary_private_church + secondary_private_non_affiliated +
+                    special_ed_public + special_ed_private_church + special_ed_private_non_affiliated +
+                    post_secondary_public + post_secondary_private)
+
+            print(f"    [+] {country_code} ({year_label}): {total} total institutions")
 
     def import_2021_22(self, file_path, year_label):
         """Import 2021-22 data"""

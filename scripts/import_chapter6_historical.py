@@ -172,16 +172,45 @@ class Chapter6Importer:
         wb = openpyxl.load_workbook(file_path, data_only=True)
         ws = wb['Table 6.1']
 
-        # 2020-21 has different format, needs manual inspection
-        print(f"    [!] 2020-21 has different structure - analyzing...")
+        # Row 4 has headers: Description, A&B, DOM, GREN, MON, SKN, SLU, SVG, VI, OECS
+        # Rows 5-20 have the data
 
-        # Try to find the data table
-        for row in range(1, 20):
-            cell_value = ws.cell(row, 1).value
-            if cell_value and 'Description' in str(cell_value):
-                print(f"    Found data starting at row {row}")
-                # Process from this row
-                break
+        countries = {
+            2: ('A&B', 'ATG'),      # Column B
+            3: ('DOM', 'DMA'),       # Column C
+            4: ('GREN', 'GRD'),      # Column D
+            5: ('MON', 'MSR'),       # Column E
+            6: ('SKN', 'KNA'),       # Column F
+            7: ('SLU', 'LCA'),       # Column G
+            8: ('SVG', 'VCT'),       # Column H
+            9: ('VI', 'VGB')         # Column I
+        }
+
+        for col_idx, (header, country_code) in countries.items():
+            record = {
+                'country_code': country_code,
+                'academic_year': year_label,
+                'national_budget_total': self.safe_float(ws.cell(5, col_idx).value),
+                'national_budget_recurrent': self.safe_float(ws.cell(6, col_idx).value),
+                'national_budget_capital': self.safe_float(ws.cell(7, col_idx).value),
+                'gdp': self.safe_float(ws.cell(8, col_idx).value),
+                'education_budget_total': self.safe_float(ws.cell(9, col_idx).value),
+                'education_budget_recurrent': self.safe_float(ws.cell(10, col_idx).value),
+                'education_budget_capital': self.safe_float(ws.cell(11, col_idx).value),
+                'education_pct_national_budget': self.safe_float(ws.cell(12, col_idx).value),
+                'education_pct_gdp': self.safe_float(ws.cell(13, col_idx).value),
+                'allocation_early_childhood': self.safe_float(ws.cell(16, col_idx).value),
+                'allocation_primary': self.safe_float(ws.cell(17, col_idx).value),
+                'allocation_secondary': self.safe_float(ws.cell(18, col_idx).value),
+                'allocation_special_ed': self.safe_float(ws.cell(19, col_idx).value),
+                'allocation_post_secondary': self.safe_float(ws.cell(20, col_idx).value),
+                'allocation_tertiary': self.safe_float(ws.cell(21, col_idx).value) if ws.max_row >= 21 else None,
+                'allocation_other': self.safe_float(ws.cell(22, col_idx).value) if ws.max_row >= 22 else None
+            }
+
+            self.data.append(record)
+            if record['national_budget_total']:
+                print(f"    [+] {country_code} ({year_label}): Budget=${record['national_budget_total']:,.0f}")
 
     def generate_sql(self):
         """Generate SQL INSERT statements"""
