@@ -24,7 +24,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   const [educationData, enrollmentData, trendData, financialData, academicYears] = await Promise.all([
     getAllEducationData(selectedYear),
-    getAllEnrollmentData(),
+    getAllEnrollmentData(selectedYear),
     getInstitutionsTrendData(),
     getFinancialTrendData(),
     getAcademicYears()

@@ -495,24 +495,142 @@ export interface EnrollmentData {
   }
 }
 
-export async function getEarlyChildhoodEnrollment(): Promise<any[]> {
-  // TODO: Implement when enrollment data is imported
-  return []
+export async function getEarlyChildhoodEnrollment(yearLabel?: string): Promise<any[]> {
+  try {
+    const yearId = await getAcademicYearId(yearLabel)
+    if (!yearId) return []
+
+    const { data, error } = await supabase
+      .from('early_childhood_enrollment')
+      .select(`
+        *,
+        countries (country_code, country_name)
+      `)
+      .eq('academic_year_id', yearId)
+
+    if (error) {
+      console.error('Error fetching early childhood enrollment:', error)
+      return []
+    }
+
+    return (data || []).map((record: any) => ({
+      country_code: record.countries?.country_code || 'UNKNOWN',
+      country_name: record.countries?.country_name || 'Unknown',
+      institution_type: record.institution_type,
+      age_group: record.age_group,
+      male: record.male || 0,
+      female: record.female || 0,
+      total: (record.male || 0) + (record.female || 0)
+    }))
+  } catch (error) {
+    console.error('Unexpected error in getEarlyChildhoodEnrollment:', error)
+    return []
+  }
 }
 
-export async function getPrimaryEnrollment(): Promise<any[]> {
-  // TODO: Implement when enrollment data is imported
-  return []
+export async function getPrimaryEnrollment(yearLabel?: string): Promise<any[]> {
+  try {
+    const yearId = await getAcademicYearId(yearLabel)
+    if (!yearId) return []
+
+    const { data, error } = await supabase
+      .from('primary_enrollment')
+      .select(`
+        *,
+        countries (country_code, country_name)
+      `)
+      .eq('academic_year_id', yearId)
+
+    if (error) {
+      console.error('Error fetching primary enrollment:', error)
+      return []
+    }
+
+    return (data || []).map((record: any) => ({
+      country_code: record.countries?.country_code || 'UNKNOWN',
+      country_name: record.countries?.country_name || 'Unknown',
+      school_type: record.school_type,
+      age_group: record.age_group,
+      k_male: record.k_male || 0,
+      k_female: record.k_female || 0,
+      g1_male: record.g1_male || 0,
+      g1_female: record.g1_female || 0,
+      g2_male: record.g2_male || 0,
+      g2_female: record.g2_female || 0,
+      g3_male: record.g3_male || 0,
+      g3_female: record.g3_female || 0,
+      g4_male: record.g4_male || 0,
+      g4_female: record.g4_female || 0,
+      g5_male: record.g5_male || 0,
+      g5_female: record.g5_female || 0,
+      g6_male: record.g6_male || 0,
+      g6_female: record.g6_female || 0,
+      subtotal_male: record.subtotal_male || 0,
+      subtotal_female: record.subtotal_female || 0,
+      total: (record.subtotal_male || 0) + (record.subtotal_female || 0)
+    }))
+  } catch (error) {
+    console.error('Unexpected error in getPrimaryEnrollment:', error)
+    return []
+  }
 }
 
-export async function getSecondaryEnrollment(): Promise<any[]> {
-  // TODO: Implement when enrollment data is imported
-  return []
+export async function getSecondaryEnrollment(yearLabel?: string): Promise<any[]> {
+  try {
+    const yearId = await getAcademicYearId(yearLabel)
+    if (!yearId) return []
+
+    const { data, error } = await supabase
+      .from('secondary_enrollment')
+      .select(`
+        *,
+        countries (country_code, country_name)
+      `)
+      .eq('academic_year_id', yearId)
+
+    if (error) {
+      console.error('Error fetching secondary enrollment:', error)
+      return []
+    }
+
+    return data || []
+  } catch (error) {
+    console.error('Unexpected error in getSecondaryEnrollment:', error)
+    return []
+  }
 }
 
-export async function getSpecialEducationEnrollment(): Promise<any[]> {
-  // TODO: Implement when enrollment data is imported
-  return []
+export async function getSpecialEducationEnrollment(yearLabel?: string): Promise<any[]> {
+  try {
+    const yearId = await getAcademicYearId(yearLabel)
+    if (!yearId) return []
+
+    const { data, error } = await supabase
+      .from('special_education_enrollment')
+      .select(`
+        *,
+        countries (country_code, country_name)
+      `)
+      .eq('academic_year_id', yearId)
+
+    if (error) {
+      console.error('Error fetching special education enrollment:', error)
+      return []
+    }
+
+    return (data || []).map((record: any) => ({
+      country_code: record.countries?.country_code || 'UNKNOWN',
+      country_name: record.countries?.country_name || 'Unknown',
+      institution_type: record.institution_type,
+      age_group: record.age_group,
+      male: record.male || 0,
+      female: record.female || 0,
+      total: (record.male || 0) + (record.female || 0)
+    }))
+  } catch (error) {
+    console.error('Unexpected error in getSpecialEducationEnrollment:', error)
+    return []
+  }
 }
 
 export async function getPrimaryAgeDistribution(): Promise<any[]> {
@@ -534,7 +652,7 @@ export async function getEnrollmentTrends(): Promise<any> {
   }
 }
 
-export async function getAllEnrollmentData(): Promise<EnrollmentData> {
+export async function getAllEnrollmentData(yearLabel?: string): Promise<EnrollmentData> {
   const [
     earlyChildhood,
     primary,
@@ -544,10 +662,10 @@ export async function getAllEnrollmentData(): Promise<EnrollmentData> {
     secondaryAgeDistribution,
     trends
   ] = await Promise.all([
-    getEarlyChildhoodEnrollment(),
-    getPrimaryEnrollment(),
-    getSecondaryEnrollment(),
-    getSpecialEducationEnrollment(),
+    getEarlyChildhoodEnrollment(yearLabel),
+    getPrimaryEnrollment(yearLabel),
+    getSecondaryEnrollment(yearLabel),
+    getSpecialEducationEnrollment(yearLabel),
     getPrimaryAgeDistribution(),
     getSecondaryAgeDistribution(),
     getEnrollmentTrends()
