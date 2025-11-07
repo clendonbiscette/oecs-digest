@@ -2,23 +2,32 @@ import { Suspense } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, GraduationCap, Users, Building2, ArrowLeft, BarChart3, TrendingUp, LineChart, DollarSign } from "lucide-react"
-import { getAllEducationData, getAllEnrollmentData, getInstitutionsTrendData, getFinancialTrendData, initializeDatabase } from "@/lib/supabase-data-service"
+import { getAllEducationData, getAllEnrollmentData, getInstitutionsTrendData, getFinancialTrendData, initializeDatabase, getAcademicYears } from "@/lib/supabase-data-service"
 import { DashboardContent } from "../dashboard-content"
 import { EnrollmentContent } from "../enrollment-content"
 import { TrendsContent } from "../trends-content"
 import { FinancialContent } from "../financial-content"
+import { YearSelector } from "@/components/year-selector"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: { year?: string }
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   // Initialize database first
   await initializeDatabase()
 
-  const [educationData, enrollmentData, trendData, financialData] = await Promise.all([
-    getAllEducationData(),
+  // Get the selected year from URL params, or use active year
+  const selectedYear = searchParams.year
+
+  const [educationData, enrollmentData, trendData, financialData, academicYears] = await Promise.all([
+    getAllEducationData(selectedYear),
     getAllEnrollmentData(),
     getInstitutionsTrendData(),
-    getFinancialTrendData()
+    getFinancialTrendData(),
+    getAcademicYears()
   ])
 
   // Calculate key metrics for institutions
@@ -53,16 +62,19 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 h-full">
-        {/* Header with Back Button */}
-        <div className="flex items-center mb-8">
-          <Link href="/" className="mr-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            <ArrowLeft className="h-6 w-6" />
-          </Link>
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Education Dashboard</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              Comprehensive analysis of educational institutions and enrollment across the Organisation of Eastern Caribbean States
-            </p>
+        {/* Header with Back Button and Year Selector */}
+        <div className="mb-8">
+          <div className="flex items-center mb-4">
+            <Link href="/" className="mr-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+              <ArrowLeft className="h-6 w-6" />
+            </Link>
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Education Dashboard</h1>
+              <p className="text-xl text-gray-600 dark:text-gray-300">
+                Comprehensive analysis of educational institutions and enrollment across the Organisation of Eastern Caribbean States
+              </p>
+            </div>
+            <YearSelector years={academicYears} currentYear={selectedYear} />
           </div>
         </div>
 
@@ -169,7 +181,7 @@ export default async function DashboardPage() {
                   </Badge>
                   <Badge variant="secondary" className="text-sm">
                     <BookOpen className="h-4 w-4 mr-1" />
-                    2022-23 Academic Year
+                    {selectedYear || academicYears.find(y => y.is_active)?.year_label || '2022-2023'}
                   </Badge>
                 </div>
 
@@ -256,7 +268,7 @@ export default async function DashboardPage() {
               </Badge>
               <Badge variant="secondary" className="text-sm">
                 <TrendingUp className="h-4 w-4 mr-1" />
-                2022-23 Academic Year
+                {selectedYear || academicYears.find(y => y.is_active)?.year_label || '2022-2023'}
               </Badge>
             </div>
 

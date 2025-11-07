@@ -121,20 +121,68 @@ export interface FinancialTrendData {
 }
 
 /**
- * Get education summary for all countries for the active academic year
- * Aggregates institution counts from the institutions table
+ * Helper function to get academic year ID
+ * If yearLabel is provided, finds that specific year
+ * Otherwise, returns the active academic year
  */
-export async function getEducationSummary(): Promise<EducationSummary[]> {
+async function getAcademicYearId(yearLabel?: string): Promise<number | null> {
   try {
-    // Get active academic year
-    const { data: activeYear, error: yearError } = await supabase
-      .from('academic_years')
-      .select('id')
-      .eq('is_active', true)
-      .single()
+    let query = supabase.from('academic_years').select('id')
 
-    if (yearError) {
-      console.error('Error fetching active academic year:', yearError)
+    if (yearLabel) {
+      query = query.eq('year_label', yearLabel)
+    } else {
+      query = query.eq('is_active', true)
+    }
+
+    const { data, error } = await query.single()
+
+    if (error) {
+      console.error('Error fetching academic year:', error)
+      return null
+    }
+
+    return data?.id || null
+  } catch (error) {
+    console.error('Unexpected error getting academic year:', error)
+    return null
+  }
+}
+
+/**
+ * Get all academic years available
+ */
+export async function getAcademicYears(): Promise<Array<{id: number, year_label: string, is_active: boolean}>> {
+  try {
+    const { data, error } = await supabase
+      .from('academic_years')
+      .select('id, year_label, is_active')
+      .order('year_label', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching academic years:', error)
+      return []
+    }
+
+    return data || []
+  } catch (error) {
+    console.error('Unexpected error getting academic years:', error)
+    return []
+  }
+}
+
+/**
+ * Get education summary for all countries for a specific academic year
+ * Aggregates institution counts from the institutions table
+ * @param yearLabel - Optional year label (e.g., "2022-2023"). If not provided, uses active year.
+ */
+export async function getEducationSummary(yearLabel?: string): Promise<EducationSummary[]> {
+  try {
+    // Get academic year ID
+    const yearId = await getAcademicYearId(yearLabel)
+
+    if (!yearId) {
+      console.error('No academic year found')
       return []
     }
 
@@ -148,7 +196,7 @@ export async function getEducationSummary(): Promise<EducationSummary[]> {
           country_name
         )
       `)
-      .eq('academic_year_id', activeYear.id)
+      .eq('academic_year_id', yearId)
 
     if (instError) {
       console.error('Error fetching institutions:', instError)
@@ -210,25 +258,22 @@ export async function getCountries(): Promise<Country[]> {
 
 /**
  * Get early childhood data (daycare and preschool) by country
+ * @param yearLabel - Optional year label (e.g., "2022-2023"). If not provided, uses active year.
  */
-export async function getEarlyChildhoodData(): Promise<EarlyChildhoodData[]> {
+export async function getEarlyChildhoodData(yearLabel?: string): Promise<EarlyChildhoodData[]> {
   try {
-    // Get active academic year
-    const { data: activeYear, error: yearError } = await supabase
-      .from('academic_years')
-      .select('id')
-      .eq('is_active', true)
-      .single()
+    // Get academic year ID
+    const yearId = await getAcademicYearId(yearLabel)
 
-    if (yearError) {
-      console.error('Error fetching active academic year:', yearError)
+    if (!yearId) {
+      console.error('No academic year found')
       return []
     }
 
     const { data: institutions, error } = await supabase
       .from('institutions')
       .select('*')
-      .eq('academic_year_id', activeYear.id)
+      .eq('academic_year_id', yearId)
 
     if (error) {
       console.error('Error fetching early childhood data:', error)
@@ -264,25 +309,22 @@ export async function getEarlyChildhoodData(): Promise<EarlyChildhoodData[]> {
 
 /**
  * Get educational institutions data (primary, secondary, special ed, TVET)
+ * @param yearLabel - Optional year label (e.g., "2022-2023"). If not provided, uses active year.
  */
-export async function getEducationalInstitutionsData(): Promise<EducationalInstitutionsData[]> {
+export async function getEducationalInstitutionsData(yearLabel?: string): Promise<EducationalInstitutionsData[]> {
   try {
-    // Get active academic year
-    const { data: activeYear, error: yearError } = await supabase
-      .from('academic_years')
-      .select('id')
-      .eq('is_active', true)
-      .single()
+    // Get academic year ID
+    const yearId = await getAcademicYearId(yearLabel)
 
-    if (yearError) {
-      console.error('Error fetching active academic year:', yearError)
+    if (!yearId) {
+      console.error('No academic year found')
       return []
     }
 
     const { data: institutions, error } = await supabase
       .from('institutions')
       .select('*')
-      .eq('academic_year_id', activeYear.id)
+      .eq('academic_year_id', yearId)
 
     if (error) {
       console.error('Error fetching educational institutions data:', error)
@@ -326,25 +368,22 @@ export async function getEducationalInstitutionsData(): Promise<EducationalInsti
 
 /**
  * Get post-secondary institutions data
+ * @param yearLabel - Optional year label (e.g., "2022-2023"). If not provided, uses active year.
  */
-export async function getPostSecondaryData(): Promise<PostSecondaryData[]> {
+export async function getPostSecondaryData(yearLabel?: string): Promise<PostSecondaryData[]> {
   try {
-    // Get active academic year
-    const { data: activeYear, error: yearError } = await supabase
-      .from('academic_years')
-      .select('id')
-      .eq('is_active', true)
-      .single()
+    // Get academic year ID
+    const yearId = await getAcademicYearId(yearLabel)
 
-    if (yearError) {
-      console.error('Error fetching active academic year:', yearError)
+    if (!yearId) {
+      console.error('No academic year found')
       return []
     }
 
     const { data: institutions, error } = await supabase
       .from('institutions')
       .select('*')
-      .eq('academic_year_id', activeYear.id)
+      .eq('academic_year_id', yearId)
 
     if (error) {
       console.error('Error fetching post-secondary data:', error)
@@ -375,10 +414,11 @@ export async function getPostSecondaryData(): Promise<PostSecondaryData[]> {
 
 /**
  * Get regional summary (aggregates across all countries)
+ * @param yearLabel - Optional year label (e.g., "2022-2023"). If not provided, uses active year.
  */
-export async function getRegionalSummary() {
+export async function getRegionalSummary(yearLabel?: string) {
   try {
-    const summary = await getEducationSummary()
+    const summary = await getEducationSummary(yearLabel)
 
     if (summary.length === 0) {
       return {
@@ -420,14 +460,15 @@ export async function getRegionalSummary() {
 
 /**
  * Get all education data at once (used by dashboard)
+ * @param yearLabel - Optional year label (e.g., "2022-2023"). If not provided, uses active year.
  */
-export async function getAllEducationData() {
+export async function getAllEducationData(yearLabel?: string) {
   const [summary, earlyChildhood, institutions, postSecondary, regional] = await Promise.all([
-    getEducationSummary(),
-    getEarlyChildhoodData(),
-    getEducationalInstitutionsData(),
-    getPostSecondaryData(),
-    getRegionalSummary(),
+    getEducationSummary(yearLabel),
+    getEarlyChildhoodData(yearLabel),
+    getEducationalInstitutionsData(yearLabel),
+    getPostSecondaryData(yearLabel),
+    getRegionalSummary(yearLabel),
   ])
 
   return {
