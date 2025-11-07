@@ -16,14 +16,31 @@ import { CountryComparison } from "@/components/country-comparison"
 
 interface FinancialContentProps {
   financialData: FinancialTrendData
+  selectedYear?: string
 }
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658']
 
-export function FinancialContent({ financialData }: FinancialContentProps) {
+export function FinancialContent({ financialData, selectedYear }: FinancialContentProps) {
   const [selectedCountry, setSelectedCountry] = useState<string>("ALL")
   const [selectedMetric, setSelectedMetric] = useState<string>("education_budget")
   const [showComparison, setShowComparison] = useState<boolean>(false)
+
+  // Filter data by selected year if provided
+  const yearFilteredData = useMemo(() => {
+    if (!selectedYear) return financialData
+
+    return {
+      ...financialData,
+      byYear: financialData.byYear.filter(point => point.year_label === selectedYear),
+      byCountry: Object.fromEntries(
+        Object.entries(financialData.byCountry).map(([country, data]) => [
+          country,
+          data.filter(point => point.year_label === selectedYear)
+        ])
+      )
+    }
+  }, [financialData, selectedYear])
 
   // Prepare data based on selected country
   const displayData = useMemo(() => {
@@ -31,7 +48,7 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
       // Aggregate by year across all countries
       const aggregated = new Map<string, any>()
 
-      financialData.byYear.forEach(point => {
+      yearFilteredData.byYear.forEach(point => {
         const existing = aggregated.get(point.year_label) || {
           year_label: point.year_label,
           national_budget_total: 0,
@@ -59,9 +76,9 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
         education_pct_national_budget: d.count > 0 ? d.education_pct_national_budget / d.count : 0,
       })).sort((a, b) => a.year_label.localeCompare(b.year_label))
     } else {
-      return financialData.byCountry[selectedCountry] || []
+      return yearFilteredData.byCountry[selectedCountry] || []
     }
-  }, [selectedCountry, financialData])
+  }, [selectedCountry, yearFilteredData])
 
   // Calculate year-over-year change
   const yoyChange = useMemo(() => {
@@ -481,7 +498,7 @@ export function FinancialContent({ financialData }: FinancialContentProps) {
       {showComparison && (
         <CountryComparison
           countries={financialData.countries}
-          data={financialData.byYear}
+          data={yearFilteredData.byYear}
           dataKey="country_code"
           metrics={[
             {
