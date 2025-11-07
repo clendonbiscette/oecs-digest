@@ -127,6 +127,8 @@ export interface FinancialTrendData {
  */
 async function getAcademicYearId(yearLabel?: string): Promise<number | null> {
   try {
+    console.log('[getAcademicYearId] Looking for year:', yearLabel || '(active year)')
+
     let query = supabase.from('academic_years').select('id')
 
     if (yearLabel) {
@@ -137,14 +139,16 @@ async function getAcademicYearId(yearLabel?: string): Promise<number | null> {
 
     const { data, error } = await query.single()
 
+    console.log('[getAcademicYearId] Query result:', { data, error })
+
     if (error) {
-      console.error('Error fetching academic year:', error)
+      console.error('[getAcademicYearId] Error fetching academic year:', error)
       return null
     }
 
     return data?.id || null
   } catch (error) {
-    console.error('Unexpected error getting academic year:', error)
+    console.error('[getAcademicYearId] Unexpected error:', error)
     return null
   }
 }
@@ -178,11 +182,14 @@ export async function getAcademicYears(): Promise<Array<{id: number, year_label:
  */
 export async function getEducationSummary(yearLabel?: string): Promise<EducationSummary[]> {
   try {
+    console.log('[getEducationSummary] Called with yearLabel:', yearLabel)
+
     // Get academic year ID
     const yearId = await getAcademicYearId(yearLabel)
+    console.log('[getEducationSummary] Year ID:', yearId)
 
     if (!yearId) {
-      console.error('No academic year found')
+      console.error('[getEducationSummary] No academic year found')
       return []
     }
 
@@ -198,12 +205,19 @@ export async function getEducationSummary(yearLabel?: string): Promise<Education
       `)
       .eq('academic_year_id', yearId)
 
+    console.log('[getEducationSummary] Institutions query result:', {
+      count: institutions?.length || 0,
+      hasError: !!instError,
+      error: instError
+    })
+
     if (instError) {
-      console.error('Error fetching institutions:', instError)
+      console.error('[getEducationSummary] Error fetching institutions:', instError)
       return []
     }
 
     if (!institutions || institutions.length === 0) {
+      console.log('[getEducationSummary] No institutions found')
       return []
     }
 
