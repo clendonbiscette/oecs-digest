@@ -160,7 +160,7 @@ export async function getAcademicYears(): Promise<Array<{id: number, year_label:
   try {
     const { data, error } = await supabase
       .from('academic_years')
-      .select('id, year_label, is_active')
+      .select('id, year_label, is_active, start_year')
       .order('year_label', { ascending: false })
 
     if (error) {
@@ -168,7 +168,14 @@ export async function getAcademicYears(): Promise<Array<{id: number, year_label:
       return []
     }
 
-    return data || []
+    // Only return years with actual data (2020-2021 through 2022-2023)
+    // Filter out future placeholder years (2023-2024 onwards)
+    const filteredData = (data || []).filter(year => {
+      const startYear = year.start_year
+      return startYear <= 2022 // Only show years starting 2022 or earlier
+    })
+
+    return filteredData
   } catch (error) {
     console.error('Unexpected error getting academic years:', error)
     return []
