@@ -42,6 +42,27 @@ export function FinancialContent({ financialData, selectedYear }: FinancialConte
     }
   }, [financialData, selectedYear])
 
+  // Calculate summary statistics for filtered data
+  const filteredSummary = useMemo(() => {
+    const dataToSummarize = selectedYear ? yearFilteredData.byYear : financialData.byYear
+
+    const validBudgets = dataToSummarize.filter(d => d.education_budget_total !== null)
+    const validGDP = dataToSummarize.filter(d => d.gdp !== null)
+    const validPctBudget = dataToSummarize.filter(d => d.education_pct_national_budget !== null)
+    const validPctGDP = dataToSummarize.filter(d => d.education_pct_gdp !== null)
+
+    return {
+      total_education_budget: validBudgets.reduce((sum, d) => sum + (d.education_budget_total || 0), 0),
+      total_gdp: validGDP.reduce((sum, d) => sum + (d.gdp || 0), 0),
+      avg_education_pct_budget: validPctBudget.length > 0
+        ? validPctBudget.reduce((sum, d) => sum + (d.education_pct_national_budget || 0), 0) / validPctBudget.length
+        : 0,
+      avg_education_pct_gdp: validPctGDP.length > 0
+        ? validPctGDP.reduce((sum, d) => sum + (d.education_pct_gdp || 0), 0) / validPctGDP.length
+        : 0
+    }
+  }, [yearFilteredData, financialData, selectedYear])
+
   // Prepare data based on selected country
   const displayData = useMemo(() => {
     if (selectedCountry === "ALL") {
@@ -192,7 +213,9 @@ export function FinancialContent({ financialData, selectedYear }: FinancialConte
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
               <div>
                 <span className="font-semibold text-amber-900 dark:text-amber-100">Academic Years:</span>{" "}
-                <span className="text-amber-700 dark:text-amber-300">{financialData.years[0]} - {financialData.years[financialData.years.length - 1]}</span>
+                <span className="text-amber-700 dark:text-amber-300">
+                  {selectedYear || `${financialData.years[0]} - ${financialData.years[financialData.years.length - 1]}`}
+                </span>
               </div>
               <div>
                 <span className="font-semibold text-amber-900 dark:text-amber-100">Data Source:</span>{" "}
@@ -200,7 +223,9 @@ export function FinancialContent({ financialData, selectedYear }: FinancialConte
               </div>
               <div>
                 <span className="font-semibold text-amber-900 dark:text-amber-100">Years Available:</span>{" "}
-                <span className="text-amber-700 dark:text-amber-300">{financialData.years.length} years</span>
+                <span className="text-amber-700 dark:text-amber-300">
+                  {selectedYear ? '1 year (filtered)' : `${financialData.years.length} years`}
+                </span>
               </div>
             </div>
           </AlertDescription>
@@ -324,9 +349,11 @@ export function FinancialContent({ financialData, selectedYear }: FinancialConte
             <CardTitle className="text-sm font-medium">Years of Data</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{financialData.years.length}</div>
+            <div className="text-2xl font-bold">
+              {selectedYear ? 1 : financialData.years.length}
+            </div>
             <p className="text-xs text-muted-foreground">
-              {financialData.years[0]} to {financialData.years[financialData.years.length - 1]}
+              {selectedYear || `${financialData.years[0]} to ${financialData.years[financialData.years.length - 1]}`}
             </p>
           </CardContent>
         </Card>
@@ -403,31 +430,33 @@ export function FinancialContent({ financialData, selectedYear }: FinancialConte
           <Card>
             <CardHeader>
               <CardTitle>Key Financial Indicators</CardTitle>
-              <CardDescription>Summary statistics</CardDescription>
+              <CardDescription>
+                {selectedYear ? `Summary for ${selectedYear}` : 'Summary across all years'}
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm">Total Education Budget</span>
                 <Badge variant="secondary">
-                  EC$ {(financialData.summary.total_education_budget / 1000000).toFixed(1)}M
+                  EC$ {(filteredSummary.total_education_budget / 1000000).toFixed(1)}M
                 </Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Total GDP</span>
                 <Badge variant="secondary">
-                  EC$ {(financialData.summary.total_gdp / 1000000).toFixed(1)}M
+                  EC$ {(filteredSummary.total_gdp / 1000000).toFixed(1)}M
                 </Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Avg % of National Budget</span>
                 <Badge variant="secondary">
-                  {financialData.summary.avg_education_pct_budget.toFixed(2)}%
+                  {filteredSummary.avg_education_pct_budget.toFixed(2)}%
                 </Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Avg % of GDP</span>
                 <Badge variant="secondary">
-                  {financialData.summary.avg_education_pct_gdp.toFixed(2)}%
+                  {filteredSummary.avg_education_pct_gdp.toFixed(2)}%
                 </Badge>
               </div>
             </CardContent>

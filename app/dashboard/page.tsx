@@ -290,7 +290,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <Suspense fallback={<div>Loading financial data...</div>}>
               <FinancialContent
                 financialData={financialData}
-                selectedYear={selectedYear || academicYears.find(y => y.is_active)?.year_label}
+                selectedYear={selectedYear}
               />
             </Suspense>
           </TabsContent>
